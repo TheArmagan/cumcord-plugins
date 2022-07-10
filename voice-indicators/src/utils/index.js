@@ -1,4 +1,4 @@
-import * as utils from "@cumcord/utils";
+import utils from "@cumcord/utils";
 
 const cachedComponents = new Map();
 

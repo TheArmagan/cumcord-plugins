@@ -1,4 +1,4 @@
-import * as webpack from "@cumcord/modules/webpack";
+import webpack from "@cumcord/modules/webpack";
 
 import { ChannelStore, GuildStore, VoiceStateStore, React, Router } from "../other/apis";
 import { COLORS } from "../other/constants";

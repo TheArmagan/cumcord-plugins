@@ -1,4 +1,4 @@
-import * as webpack from "@cumcord/modules/webpack";
+import webpack from "@cumcord/modules/webpack";
 
 export const GuildStore = webpack.findByProps("getGuild", "getGuildCount");
 export const ChannelStore = webpack.findByProps("getChannel", "hasChannel");

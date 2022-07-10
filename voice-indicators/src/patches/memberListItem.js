@@ -1,4 +1,4 @@
-import * as patcher from "@cumcord/patcher";
+import patcher from "@cumcord/patcher";
 
 import { Indicator } from "../components/Indicator";
 import { React } from "../other/apis";

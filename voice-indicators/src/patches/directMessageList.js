@@ -1,5 +1,5 @@
-import * as webpack from "@cumcord/modules/webpack";
-import * as patcher from "@cumcord/patcher";
+import webpack from "@cumcord/modules/webpack";
+import patcher from "@cumcord/patcher";
 
 import { Indicator } from "../components/Indicator";
 import { React } from "../other/apis";
