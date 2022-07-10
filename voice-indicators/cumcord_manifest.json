@@ -2,6 +2,6 @@
   "name": "Voice Indicators",
   "description": "Show the voice indicators right side of the user names. (armagan.rest)",
   "author": "TheArmagan",
-  "file": "index.jsx",
+  "file": "src/index.js",
   "license": "GNU General Public License Version 3"
 }

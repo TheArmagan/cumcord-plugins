@@ -16,7 +16,7 @@ export function getComponentsByNode(node) {
 
 export async function sleep(ms=0) { return new Promise(r => setTimeout(r, ms)) };
 
-export async function getComponentByNameAndSelector(name, selector) {
+export async function findComponentByNameAndSelector(name, selector) {
   if (cachedComponents.has(name)) return cachedComponents.get(name);
 
   let component;
@@ -24,7 +24,7 @@ export async function getComponentByNameAndSelector(name, selector) {
   while (true) {
     const elements = document.querySelectorAll(selector);
     if (!elements.length) {
-      await sleep(50);
+      await sleep(100);
       continue;
     }
 
