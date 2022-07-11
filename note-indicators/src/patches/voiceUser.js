@@ -21,12 +21,10 @@ export function patchVoiceUser() {
   });
 
   const patch2 = patcher.after("renderIcons", VoiceUser.default.prototype, (_, returnValue) => {
-    console.log("renderIcons", returnValue);
     window.returnValue = returnValue;
     return h(UserContext.Consumer, {
       children: userId => {
         if (!userId) return null;
-        console.log("wow", userId);
         let element = h(Indicator, {
           userId,
           kind: "voice-user"
