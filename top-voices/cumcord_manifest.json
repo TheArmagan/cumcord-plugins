@@ -1,0 +1,7 @@
+{
+  "name": "Top Voices",
+  "description": "Shows list active voice channels on guilds. (armagan.rest)",
+  "author": "TheArmagan",
+  "file": "src/index.js",
+  "license": "GNU General Public License Version 3"
+}
