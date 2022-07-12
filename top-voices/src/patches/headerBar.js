@@ -15,25 +15,30 @@ export function patchHeaderBar() {
 
   const patch = patcher.after("default", HeaderBar, ([props], returnValue) => {
     try {
-      returnValue.props.children.props.children[1].props.children.props.children.push(
-        h("div", { className: classes.divider }),
-        h("div", {
-          className: "tv--button-container",
-          onClick() {
-            openVoicesModal();
-          }
-        }, [
-          h(Tooltip, {
-            className: "tv--tooltip",
-            text: "Top Voices"
+      let tree = returnValue.props.children.props.children[1].props.children.props.children;
+      if (tree.length == 4) {
+        tree.push(
+          h("div", { className: classes.divider }),
+          h("div", {
+            className: "tv--button-container",
+            onClick() {
+              openVoicesModal();
+            }
           }, [
-            h(VoiceIcon, {
-              color: "#b9bbbe"
-            })
+            h(Tooltip, {
+              className: "tv--tooltip",
+              text: "Top Voices"
+            }, [
+              h(VoiceIcon, {
+                color: "#b9bbbe"
+              })
+            ])
           ])
-        ])
-      )
-    } catch (err) {};
+        )
+      }
+    } catch (err) {
+      console.log(err);
+    };
   });
 
   patchContainer.add(patch);

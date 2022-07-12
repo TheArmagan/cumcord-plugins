@@ -15,8 +15,8 @@ export function Indicator({ userId }) {
   function onChange() {
     let voiceState = VoiceStateStore.getVoiceStateForUser(userId);
     if (!voiceState) return setData({ guild: null, channel: null, state: null });
-    let channel = ChannelStore.getChannel(voiceState.channelId);
-    let guild = GuildStore.getGuild(channel.guild_id);
+    let channel = ChannelStore.getChannel(voiceState?.channelId);
+    let guild = GuildStore.getGuild(channel?.guild_id);
     setData({ guild, channel, state: voiceState });
   }
 
