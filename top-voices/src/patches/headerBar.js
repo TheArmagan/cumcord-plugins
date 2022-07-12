@@ -38,7 +38,7 @@ export function patchHeaderBar() {
         )
       }
     } catch (err) {
-      
+      console.error(err)
     };
   });
 
