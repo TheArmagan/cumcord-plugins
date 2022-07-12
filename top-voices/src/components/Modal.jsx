@@ -69,16 +69,15 @@ export function Modal({ e }) {
               {
                 guild.channels.map(channel => <div className="channel">
                   <div className="header">
-                    <div className="info">
+                    <div
+                      className="info"
+                      onClick={(e2) => {
+                      e2.preventDefault();
+                      Router.transitionTo(`/channels/${guild.guild.id}/${channel.channel.id}`);
+                      e.onClose();
+                    }}>
                       <VoiceIcon />
-                      <div
-                        className="name"
-                        onClick={(e2) => {
-                          e2.preventDefault();
-                          Router.transitionTo(`/channels/${guild.guild.id}/${channel.channel.id}`);
-                          e.onClose();
-                        }}
-                      >
+                      <div className="name">
                         {channel.channel.name}
                       </div>
                     </div>
