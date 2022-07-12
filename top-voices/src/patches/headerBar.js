@@ -16,6 +16,7 @@ export function patchHeaderBar() {
   const patch = patcher.after("default", HeaderBar, ([props], returnValue) => {
     try {
       let tree = returnValue.props.children.props.children[1].props.children.props.children;
+      console.log(tree);
       if (tree[1] == null) {
         tree.push(
           h("div", { className: classes.divider }),
