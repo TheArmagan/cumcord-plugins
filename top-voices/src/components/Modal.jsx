@@ -47,6 +47,7 @@ export function Modal({ e }) {
     } else {
       dataStore.foldedGuilds.push(guildId);
     }
+    dataStore.foldedGuilds = [...dataStore.foldedGuilds]; // nest save
     setFoldedGuilds([...dataStore.foldedGuilds]);
   }
   
