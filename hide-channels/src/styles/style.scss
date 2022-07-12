@@ -1,0 +1,146 @@
+.hc--container {
+  z-index: 1;
+  & > .guild {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    background-color: #2f3136;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    color: whitesmoke;
+
+    & > .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+
+      & > .info {
+        display: flex;
+        align-items: center;
+        transition: opacity 100ms ease-in-out;
+
+        &.has-hidden {
+          opacity: 0.5;
+        }
+
+        .icon {
+          margin-right: 8px;
+          width: 26px;
+          height: 26px;
+          border-radius: 4px;
+          background-size: contain;
+          background-position: center;
+        }
+
+        .name {
+          font-size: 18px;
+        }
+      }
+
+      & > .right {
+        display: flex;
+
+        & > .fold {
+          border-radius: 50%;
+          width: 26px;
+          height: 26px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          color: #b9bbbe;
+          transition: transform 100ms ease-in-out;
+
+          &.folded {
+            transform: rotateZ(-90deg);
+          }
+
+          svg {
+            width: 26px;
+            height: 26px;
+          }
+        }
+      }
+    }
+
+    &.folded > .header {
+      margin-bottom: 0px;
+    }
+
+    & > .content {
+      display: flex;
+      flex-direction: column;
+      max-height: 200px;
+      contain: content;
+      overflow-y: auto;
+      margin-left: 28px;
+
+      & > .channel {
+        padding: 4px;
+        transition: opacity 100ms ease-in-out, filter 100ms ease-in-out;
+        border-radius: 8px;
+        margin-top: 4px;
+
+        &:hover {
+          filter: brightness(1.1);
+          background-color: #2f3136;
+        }
+
+        &.hidden {
+          opacity: 0.5;
+        }
+
+        & > .header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          color: #b9bbbe;
+          cursor: pointer;
+          
+
+          & > .info {
+            display: flex;
+            cursor: pointer;
+
+            & > svg {
+              width: 18px;
+              height: 18px;
+              margin-right: 8px;
+            }
+            & > .name {
+              font-size: 16px;
+            }
+          }
+
+          & > .toggle {
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+
+            & > svg {
+              width: 16px;
+              height: 16px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.hc--icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  transition: filter 100ms ease-in-out;
+
+  &:hover {
+    filter: brightness(1.2);
+  }
+}

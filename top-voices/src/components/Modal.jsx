@@ -2,12 +2,12 @@ import webpack from "@cumcord/modules/webpack";
 
 import { ChannelStore, dataStore, FluxDispatcher, GuildStore, ModalComponents, React, Router, Tooltip, UserStore, VoiceStateStore } from "../other/apis";
 import { COLORS } from "../other/constants";
-import { ArrowDown } from "./ArrowDown";
+import { ArrowDownIcon } from "./ArrowDownIcon";
 import { DeafIcon } from "./DeafIcon";
 import { MuteIcon } from "./MuteIcon";
 import { VoiceIcon } from "./VoiceIcon";
 
-const scrollClasses = webpack.findByProps("thin", "scrollerBase")
+const scrollClasses = webpack.findByProps("thin", "scrollerBase");
 
 export function Modal({ e }) {
   /** @type {[{guild: any, users: {user: any, state:any}[], channels: {channel: any, users: {user: any, state: any}[]}[]}[], any]} */
@@ -83,7 +83,7 @@ export function Modal({ e }) {
                     toggleFold(guild.guild.id);
                   }}
                 >
-                  <ArrowDown />
+                  <ArrowDownIcon />
                 </div>
                 <div className="user-count">{guild.users.length}</div>
               </div>
