@@ -4,7 +4,6 @@ import patcher from "@cumcord/patcher";
 import { VoiceIcon } from "../components/VoiceIcon";
 import { openVoicesModal } from "../methods/openVoicesModal";
 import { React, Tooltip } from "../other/apis";
-import { COLORS } from "../other/constants";
 import patchContainer from "../other/patchContainer";
 
 const { createElement: h } = React;
