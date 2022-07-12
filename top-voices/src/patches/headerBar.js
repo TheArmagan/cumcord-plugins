@@ -11,12 +11,11 @@ const { createElement: h } = React;
 
 export function patchHeaderBar() {
   const HeaderBar = webpack.find(m => m?.default?.displayName == "HeaderBar");
-  const classes = findByProps("divider", "hamburger", "container");;
+  const classes = webpack.findByProps("divider", "hamburger", "container");;
 
   const patch = patcher.after("default", HeaderBar, ([props], returnValue) => {
     try {
       let tree = returnValue.props.children.props.children[1].props.children.props.children;
-      console.log(tree);
       if (tree[1] == null) {
         tree.push(
           h("div", { className: classes.divider }),
@@ -37,9 +36,7 @@ export function patchHeaderBar() {
           ])
         )
       }
-    } catch (err) {
-      console.error(err)
-    };
+    } catch (err) {};
   });
 
   patchContainer.add(patch);
