@@ -47,7 +47,7 @@
     padding: 16px;
     display: flex;
     flex-direction: column;
-    
+
     & > .guild {
       display: flex;
       flex-direction: column;
@@ -81,17 +81,46 @@
           }
         }
 
-        & > .user-count {
-          border-radius: 50%;
-          width: 26px;
-          height: 26px;
+        & > .right {
           display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: #202225;
-          font-size: 12px;
-          color: whitesmoke;
+          & > .user-count {
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #202225;
+            font-size: 12px;
+            color: whitesmoke;
+          }
+
+          & > .fold {
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 4px;
+            cursor: pointer;
+            color: #b9bbbe;
+            transition: transform 100ms ease-in-out;
+
+            &.folded {
+              transform: rotateZ(-90deg);
+            }
+
+            svg {
+              width: 26px;
+              height: 26px;
+            }
+          }
         }
+      }
+
+      &.folded > .header {
+        margin-bottom: 0px;
       }
 
       & > .content {
@@ -101,7 +130,6 @@
         contain: content;
         overflow-y: auto;
         margin-left: 28px;
-        
 
         & > .channel {
           padding: 4px;
@@ -123,7 +151,6 @@
               & > .name {
                 font-size: 16px;
               }
-
             }
 
             & > .user-count {
@@ -172,15 +199,16 @@
                   margin-bottom: -2px;
                   .tv--icon {
                     width: 12px;
-                    height: 12px;   
+                    height: 12px;
                   }
                 }
-                
               }
             }
           }
         }
       }
     }
+
+
   }
 }

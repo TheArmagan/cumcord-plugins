@@ -1,7 +1,8 @@
 import webpack from "@cumcord/modules/webpack";
 
-import { ChannelStore, FluxDispatcher, GuildStore, ModalComponents, React, Router, Tooltip, UserStore, VoiceStateStore } from "../other/apis";
+import { ChannelStore, dataStore, FluxDispatcher, GuildStore, ModalComponents, React, Router, Tooltip, UserStore, VoiceStateStore } from "../other/apis";
 import { COLORS } from "../other/constants";
+import { ArrowDown } from "./ArrowDown";
 import { DeafIcon } from "./DeafIcon";
 import { MuteIcon } from "./MuteIcon";
 import { VoiceIcon } from "./VoiceIcon";
@@ -11,6 +12,8 @@ const scrollClasses = webpack.findByProps("thin", "scrollerBase")
 export function Modal({ e }) {
   /** @type {[{guild: any, users: {user: any, state:any}[], channels: {channel: any, users: {user: any, state: any}[]}[]}[], any]} */
   let [data, setData] = React.useState([]);
+
+  let [foldedGuilds, setFoldedGuilds] = React.useState([...dataStore.foldedGuilds]);
 
   function onChange() {
     let guildStates = Object.entries(VoiceStateStore.getAllVoiceStates());
@@ -35,7 +38,16 @@ export function Modal({ e }) {
         new Map()
       )).values()].sort((a, b)=>b.users.length-a.users.length);
     });
-    setData(states);
+    setData(states.filter(i=>!!i.users?.length && !!i.guild?.id));
+  }
+
+  function toggleFold(guildId) {
+    if (dataStore.foldedGuilds.includes(guildId)) {
+      dataStore.foldedGuilds.splice(dataStore.foldedGuilds.indexOf(guildId), 1);
+    } else {
+      dataStore.foldedGuilds.push(guildId);
+    }
+    setFoldedGuilds([...dataStore.foldedGuilds]);
   }
   
   React.useEffect(() => {
@@ -55,7 +67,7 @@ export function Modal({ e }) {
       </ModalComponents.ModalHeader>
       <ModalComponents.ModalContent className="tv--modal-content">
         {
-          data.map((guild) => <div class="guild">
+          data.map((guild) => <div className={`guild ${foldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}>
             <div className="header">
               <div class="info">
                 <div className="icon" style={{ backgroundImage: `url("https://cdn.discordapp.com/icons/${guild.guild.id}/${guild.guild.icon}.png")` }}></div>
@@ -63,11 +75,21 @@ export function Modal({ e }) {
                   {guild.guild.name}
                 </div>
               </div>
-              <div className="user-count">{guild.users.length}</div>
+              <div className="right">
+                <div
+                  className={`fold ${foldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}
+                  onClick={() => {
+                    toggleFold(guild.guild.id);
+                  }}
+                >
+                  <ArrowDown />
+                </div>
+                <div className="user-count">{guild.users.length}</div>
+              </div>
             </div>
             <div className={`content ${scrollClasses.thin}`}>
               {
-                guild.channels.map(channel => <div className="channel">
+                foldedGuilds.includes(guild.guild.id) ? null : guild.channels.map(channel => <div className="channel">
                   <div className="header">
                     <div
                       className="info"
