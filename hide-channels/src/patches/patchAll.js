@@ -7,7 +7,17 @@ import webpack from "@cumcord/modules/webpack";
 
 export async function patchAll() {
 
-  const ChannelItem = find(i => i?.default?.displayName == "ChannelItem");
+  const ChannelItem = webpack.find(i => i?.default?.displayName == "ChannelItem");
+
+  const VoiceUsers = webpack.find(i => i?.default?.displayName == "VoiceUsers");
+
+  const voiceUsersPatch = patcher.instead("render", VoiceUsers.default.prototype, function(args, ogMethod) {
+    let hidden = [...dataStore.hiddenChannels];
+    if (hidden.includes(this?.props?.channel?.id)) {
+      return null;
+    }
+    return ogMethod.call(this, ...args);
+  });
 
   const channelItemPatch = patcher.instead("default", ChannelItem, function(args, ogMethod) {
     let hidden = [...dataStore.hiddenChannels];
@@ -39,6 +49,7 @@ export async function patchAll() {
   })();
 
   patchContainer.add(
+    voiceUsersPatch,
     channelItemPatch,
     hasUnreadPatch,
     windowAPIPatch
