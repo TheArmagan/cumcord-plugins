@@ -76,24 +76,29 @@ export async function patchAll() {
       let hidden = [...dataStore.hiddenChannels];
       let hiddenLength = hidden.length;
       let res = ogMethod.call(this, ...args);
-      if (this?.props?.voiceStates) {
-        for (let i = 0; i < hiddenLength; i++) {
-          const id = hidden[i];
-          delete this.props.voiceStates[id];
-        }
-      }
-      if (this?.props?.guildChannels?.sortedNamedCategories) {
-        let cats = this?.props?.guildChannels?.sortedNamedCategories;
-        let catsLength = cats.length;
-        for (let i = 0; i < catsLength; i++) {
-          const cat = cats[i];
-          for (let j = 0; j < hiddenLength; j++) {
-            const id = hidden[j];
-            delete cat.channels[id];
+      try {
+        if (this?.props?.voiceStates) {
+          for (let i = 0; i < hiddenLength; i++) {
+            const id = hidden[i];
+            delete this.props.voiceStates[id];
           }
-          if (!Object.keys(cat.channels).length)
-            delete this?.props?.guildChannels?.sortedNamedCategories[i];
         }
+        if (this?.props?.guildChannels?.sortedNamedCategories) {
+          let cats = this?.props?.guildChannels?.sortedNamedCategories;
+          let catsLength = cats.length;
+          for (let i = 0; i < catsLength; i++) {
+            const cat = cats[i];
+            if (!cat.channels) continue;
+            for (let j = 0; j < hiddenLength; j++) {
+              const id = hidden[j];
+              delete cat.channels[id];
+            }
+            if (!Object.keys(cat.channels).length)
+              delete this?.props?.guildChannels?.sortedNamedCategories[i];
+          }
+        }
+      } catch (err) {
+        console.log("Hide Channels | Channels render error!", err);
       }
       return res;
     });
