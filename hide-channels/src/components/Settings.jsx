@@ -36,13 +36,23 @@ export function Settings() {
     }
   );
 
+  let toggleHiddenWithoutUpdate = arrayToggler(
+    () => [...dataStore.hiddenChannels],
+    (arr) => {
+      let hidden = [...arr];
+      dataStore.hiddenChannels = hidden; // nest save
+    }
+  );
+
   let toggleAllGuildChannels = (guildId) => {
     let allChIds = data.find(i => i.guild.id == guildId).channels.map(i => i.id);
     let allChIdsLength = allChIds.length;
     for (let i = 0; i < allChIdsLength; i++) {
       const chId = allChIds[i];
-      toggleHidden(chId);
+      toggleHiddenWithoutUpdate(chId);
     }
+    setHiddenChannels([...dataStore.hiddenChannels]);
+    setHasHiddenChannels(data.filter(i => i.channels.some(j => hidden.includes(j.id))).map(i => i.guild.id));
   }
 
   React.useEffect(() => {
