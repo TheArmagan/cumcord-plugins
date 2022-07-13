@@ -91,6 +91,8 @@ export async function patchAll() {
             const id = hidden[j];
             delete cat.channels[id];
           }
+          if (!Object.keys(cat.channels).length)
+            delete this?.props?.guildChannels?.sortedNamedCategories[i];
         }
       }
       return res;
