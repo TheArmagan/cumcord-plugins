@@ -1,7 +1,0 @@
-{
-  "name": "Hide Channels",
-  "description": "Options for hiding channels. (armagan.rest)",
-  "author": "TheArmagan",
-  "file": "src/index.jsx",
-  "license": "GNU General Public License Version 3"
-}
