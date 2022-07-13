@@ -6,6 +6,7 @@ import { ArrowDownIcon } from "./ArrowDownIcon";
 import { EyeIcon } from "./EyeIcon";
 import { EyeOffIcon } from "./EyeOffIcon";
 import { TextIcon } from "./TextIcon";
+import { ToggleIcon } from "./ToggleIcon";
 import { VoiceIcon } from "./VoiceIcon";
 
 const scrollClasses = webpack.findByProps("thin", "scrollerBase");
@@ -35,6 +36,15 @@ export function Settings() {
     }
   );
 
+  let toggleAllGuildChannels = (guildId) => {
+    let allChIds = data.find(i => i.guild.id == guildId).channels.map(i => i.id);
+    let allChIdsLength = allChIds.length;
+    for (let i = 0; i < allChIdsLength; i++) {
+      const chId = allChIds[i];
+      toggleHidden(chId);
+    }
+  }
+
   React.useEffect(() => {
     let hidden = [...dataStore.hiddenChannels];
     let guilds = Object.values(GuildStore.getGuilds())
@@ -43,7 +53,7 @@ export function Settings() {
           guild: Object.assign(g, {
             member_count: GuildMemberCountStore.getMemberCount(g.id)
           }),
-          channels: chIds.map(cId => ChannelStore.getChannel(cId)).filter(i => i?.name)
+          channels: [...GuildChannelStore.getSelectableChannelIds(g.id), ...GuildChannelStore.getVocalChannelIds(g.id)].map(cId => ChannelStore.getChannel(cId)).filter(i => i?.name)
         }
       })
       .sort((a, b) => b.guild.member_count - a.guild.member_count)
@@ -64,6 +74,14 @@ export function Settings() {
               </div>
             </div>
             <div className="right">
+              <div
+                className={`toggle-all ${!unFoldedGuilds.includes(guild.guild.id) ? "hide" : "" }`}
+                onClick={() => {
+                  toggleAllGuildChannels(guild.guild.id);
+                }}
+              >
+                <ToggleIcon />
+              </div>
               <div
                 className={`fold ${!unFoldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}
                 onClick={() => {
