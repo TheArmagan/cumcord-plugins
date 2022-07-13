@@ -11,3 +11,5 @@ export const Router = webpack.findByProps("transitionTo");
 export const React = webpack.findByProps("createElement");
 /** @type {{hiddenChannels: string[]}} */
 export const dataStore = data.persist.store;
+
+export const { categoryExpandAll, categoryCollapseAll } = findByProps("categoryExpandAll", "categoryCollapseAll");

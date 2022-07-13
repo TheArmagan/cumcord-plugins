@@ -1,6 +1,6 @@
 import webpack from "@cumcord/modules/webpack";
 
-import { ChannelStore, dataStore, GuildChannelStore, GuildMemberCountStore, GuildStore, React } from "../other/apis";
+import { categoryExpandAll, ChannelStore, dataStore, GuildChannelStore, GuildMemberCountStore, GuildStore, React } from "../other/apis";
 import { arrayToggler } from "../utils";
 import { ArrowDownIcon } from "./ArrowDownIcon";
 import { EyeIcon } from "./EyeIcon";
@@ -58,11 +58,12 @@ export function Settings() {
     let hidden = [...dataStore.hiddenChannels];
     let guilds = Object.values(GuildStore.getGuilds())
       .map(g => {
+        let CHS = GuildChannelStore.getAllGuilds("OG")[g.id];
         return {
           guild: Object.assign(g, {
             member_count: GuildMemberCountStore.getMemberCount(g.id)
           }),
-          channels: [...GuildChannelStore.getSelectableChannelIds(g.id), ...GuildChannelStore.getVocalChannelIds(g.id)].map(cId => ChannelStore.getChannel(cId)).filter(i => i?.name)
+          channels: CHS ? [...CHS.SELECTABLE.map(i => i.channel), ...CHS.VOCAL.map(i=>i.channel)].filter(i => i?.name) : []
         }
       })
       .sort((a, b) => b.guild.member_count - a.guild.member_count)
@@ -87,6 +88,7 @@ export function Settings() {
                 className={`toggle-all ${!unFoldedGuilds.includes(guild.guild.id) ? "hide" : "" }`}
                 onClick={() => {
                   toggleAllGuildChannels(guild.guild.id);
+                  categoryExpandAll(guild.guild.id);
                 }}
               >
                 <ToggleIcon />
@@ -108,6 +110,7 @@ export function Settings() {
                   className="header"
                   onClick={() => {
                     toggleHidden(channel.id);
+                    categoryExpandAll(guild.guild.id);
                   }}
                 >
                   <div className="info">

@@ -10,9 +10,9 @@ export default {
   onLoad() {
     if (!Array.isArray(dataStore.hiddenChannels)) dataStore.hiddenChannels = [];
 
-    clearUnused();
-    patchAll();
+    // clearUnused();
     patchStyles();
+    patchAll();
   },
   onUnload() {
     patchContainer.removeAll();

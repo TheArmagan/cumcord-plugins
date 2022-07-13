@@ -48,6 +48,7 @@ export async function findComponentByNameAndSelector(name, selector) {
     }
 
     if (component) break;
+    await sleep(100);
   }
 
   cachedComponents.set(name, component);
