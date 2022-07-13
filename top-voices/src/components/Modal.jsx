@@ -16,16 +16,20 @@ export function Modal({ e }) {
   let [foldedGuilds, setFoldedGuilds] = React.useState([...dataStore.foldedGuilds]);
 
   function onChange() {
+    let hiddenChannels = !!window["HideChannelsAPI"] ? HideChannelsAPI.getHiddenChannelIds() : [];
     let guildStates = Object.entries(VoiceStateStore.getAllVoiceStates());
     /** @type {{guild: any, users: {user: any, state:any}[], channels: {channel: any, users: {user: any, state: any}[]}[]}[]} */
     let states = guildStates.filter(i=>i[0]!="@me").map(i => ({
       guild: GuildStore.getGuild(i[0]),
-      users: Object.entries(i[1]).map(j => ({
-        user: UserStore.getUser(j[0]),
-        state: Object.assign(j[1], {
-          channel: ChannelStore.getChannel(j[1].channelId)
-        })
-      }))
+      users: Object.entries(i[1]).map(j => {
+        let channel = hiddenChannels.includes(j[1].channelId) ? null : ChannelStore.getChannel(j[1].channelId)
+        return {
+          user: UserStore.getUser(j[0]),
+          state: channel ? Object.assign(j[1], {
+            channel: channel
+          }) : null
+        }
+      }).filter(i => i.state)
     })).sort((a, b)=>b.users.length-a.users.length);
     states.forEach((state) => {
       state.channels = [...(state.users.reduce(
