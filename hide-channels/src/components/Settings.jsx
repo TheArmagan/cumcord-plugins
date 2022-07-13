@@ -20,7 +20,6 @@ export function Settings() {
   let toggleFold = arrayToggler(
     () => [...unFoldedGuilds],
     (arr) => {
-      console.log(arr);
       setUnFoldedGuilds([...arr]);
       setData(data);
     }
