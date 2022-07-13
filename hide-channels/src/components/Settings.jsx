@@ -33,27 +33,23 @@ export function Settings() {
       setHiddenChannels(hidden);
       setHasHiddenChannels(data.filter(i => i.channels.some(j => hidden.includes(j.id))).map(i => i.guild.id));
     }
-  )
-
-
+  );
 
   React.useEffect(() => {
+    let hidden = [...dataStore.hiddenChannels];
     let guilds = Object.values(GuildStore.getGuilds())
-      .map(g => ({
-        guild: Object.assign(g, {
-          member_count: GuildMemberCountStore.getMemberCount(g.id)
-        }),
-        channels:
-          [...GuildChannelStore.getSelectableChannelIds(g.id), ...GuildChannelStore.getVocalChannelIds(g.id)]
-            .map(cId => ChannelStore.getChannel(cId)).filter(i=>i?.name)
-      }))
+      .map(g => {
+        return {
+          guild: Object.assign(g, {
+            member_count: GuildMemberCountStore.getMemberCount(g.id)
+          }),
+          channels: chIds.map(cId => ChannelStore.getChannel(cId)).filter(i => i?.name)
+        }
+      })
       .sort((a, b) => b.guild.member_count - a.guild.member_count)
       .filter(i=>!!i.channels.length)
     setData(guilds);
-    {
-      let hidden = [...dataStore.hiddenChannels];
-      setHasHiddenChannels(guilds.filter(i => i.channels.some(j => hidden.includes(j.id))).map(i => i.guild.id));
-    }
+    setHasHiddenChannels(guilds.filter(i => i.channels.some(j => hidden.includes(j.id))).map(i => i.guild.id));
   }, []);
 
   return (
