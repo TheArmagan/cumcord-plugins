@@ -25,8 +25,22 @@ export async function patchAll() {
     return ogMethod.call(this, ...args);
   });
 
+  const windowAPIPatch = (() => {
+    Object.assign(window, {
+      HideChannelsAPI: {
+        getHiddenChannelIds() {
+          return [...dataStore.hiddenChannels];
+        }
+      }
+    });
+    return () => {
+      delete window["HideChannelsAPI"];
+    }
+  })();
+
   patchContainer.add(
     channelItemPatch,
-    hasUnreadPatch
+    hasUnreadPatch,
+    windowAPIPatch
   );
 }
