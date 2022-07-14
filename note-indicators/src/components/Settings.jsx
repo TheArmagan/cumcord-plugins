@@ -13,7 +13,7 @@ export function Settings() {
   async function onChange() {
     let notes = [];
     for (const key in cache.notes) {
-      let note = NoteStore.getNote(key);
+      let note = NoteStore.getNote(key)?.note;
       if (!note) continue;
       let user = await getUser(key);
       if (!user) continue;
