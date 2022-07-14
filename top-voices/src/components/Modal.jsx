@@ -15,11 +15,7 @@ export function Modal({ e }) {
 
   let [unFoldedGuilds, setUnFoldedGuilds] = React.useState([...dataStore.unFoldedGuilds]);
 
-  let lastUpdate = 0;
-
   function onChange() {
-    if (!(Date.now() - lastUpdate > 1000)) return;
-    lastUpdate = Date.now();
     let hiddenChannels = !!window["HideChannelsAPI"] ? HideChannelsAPI.getHiddenChannelIds() : [];
     let guildStates = Object.entries(VoiceStateStore.getAllVoiceStates());
     /** @type {{guild: any, users: {user: any, state:any}[], channels: {channel: any, users: {user: any, state: any}[]}[]}[]} */
