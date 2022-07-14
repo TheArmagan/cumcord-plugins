@@ -8,6 +8,8 @@ import { noteUpdater } from "./patches/noteUpdater";
 import { patchStyles } from "./patches/styles";
 import { loadNotes } from "./other/loadNotes";
 
+import { Settings } from "./components/Settings";
+
 export default {
   onLoad() {
     patchDirectMessageList();
@@ -20,5 +22,8 @@ export default {
   },
   onUnload() {
     patchContainer.removeAll();
+  },
+  settings() {
+    return <Settings />
   }
 }

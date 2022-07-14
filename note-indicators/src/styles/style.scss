@@ -1,0 +1,76 @@
+.ni--icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+}
+
+.ni--container {
+  display: flex;
+  width: min-width;
+}
+
+.ni--icon {
+  display: flex;
+  width: 14px;
+  height: 14px;
+}
+
+[class*="message-"] [class*="headerText-"],
+[class*="message-"] h2[class*="header-"],
+[class*="voiceUser-"] [class*="content-"] {
+  display: flex;
+  align-items: center;
+}
+
+.ni--settings {
+  padding-top: 0px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+
+  & > .loading {
+    width: 100%;
+    text-align: center;
+    color: whitesmoke;
+  }
+
+  & > .user {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    background-color: #2f3136;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    color: whitesmoke;
+
+    & > .info {
+      display: flex;
+      align-items: center;
+
+      .icon {
+        margin-right: 8px;
+        width: 26px;
+        height: 26px;
+        border-radius: 4px;
+        background-size: contain;
+        background-position: center;
+      }
+
+      .name {
+        font-size: 18px;
+      }
+    }
+
+    .indicator {
+      display: flex;
+    }
+  }
+}

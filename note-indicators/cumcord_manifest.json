@@ -2,6 +2,6 @@
   "name": "Note Indicators",
   "description": "Show the note indicators right side of the user names. (armagan.rest)",
   "author": "TheArmagan",
-  "file": "src/index.js",
+  "file": "src/index.jsx",
   "license": "GNU General Public License Version 3"
 }
