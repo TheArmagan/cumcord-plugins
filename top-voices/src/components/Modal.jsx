@@ -86,7 +86,7 @@ export function Modal({ e }) {
               </div>
               <div className="right">
                 <div
-                  className={`fold ${unFoldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}
+                  className={`fold ${!unFoldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}
                   onClick={() => {
                     toggleFold(guild.guild.id);
                   }}
@@ -98,7 +98,7 @@ export function Modal({ e }) {
             </div>
             <div className={`content ${scrollClasses.thin}`}>
               {
-                unFoldedGuilds.includes(guild.guild.id) ? null : guild.channels.map(channel => <div className="channel">
+                !unFoldedGuilds.includes(guild.guild.id) ? null : guild.channels.map(channel => <div className="channel">
                   <div className="header">
                     <div
                       className="info"
