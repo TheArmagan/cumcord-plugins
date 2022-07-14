@@ -8,6 +8,7 @@ import { MuteIcon } from "./MuteIcon";
 import { VoiceIcon } from "./VoiceIcon";
 
 const scrollClasses = webpack.findByProps("thin", "scrollerBase");
+const { getUser } = webpack.findByProps("fetchProfile", "getUser");
 
 export function Modal({ e }) {
   /** @type {[{guild: any, users: {user: any, state:any}[], channels: {channel: any, users: {user: any, state: any}[]}[]}[], any]} */
@@ -120,10 +121,13 @@ export function Modal({ e }) {
                         className="user"
                         onClick={(e2) => {
                           e2.preventDefault();
-                          FluxDispatcher.dispatch({
-                            type: "USER_PROFILE_MODAL_OPEN",
-                            userId: user.user.id
-                          })
+                          (async () => {
+                            await getUser(user.user.id);
+                            FluxDispatcher.dispatch({
+                              type: "USER_PROFILE_MODAL_OPEN",
+                              userId: user.user.id
+                            });
+                          })();
                         }}
                       >
                         <Tooltip
