@@ -76,7 +76,7 @@ export function Modal({ e }) {
       </ModalComponents.ModalHeader>
       <ModalComponents.ModalContent className="tv--modal-content">
         {
-          data.map((guild) => <div className={`guild ${unFoldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}>
+          data.map((guild) => <div className={`guild ${!unFoldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}>
             <div className="header">
               <div class="info">
                 <div className="icon" style={{ backgroundImage: `url("https://cdn.discordapp.com/icons/${guild.guild.id}/${guild.guild.icon}.png")` }}></div>
