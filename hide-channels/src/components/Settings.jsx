@@ -33,7 +33,7 @@ export function Settings() {
       let hidden = [...arr];
       dataStore.hiddenChannels = hidden; // nest save
       setHiddenChannels(hidden);
-      setHasHiddenChannels(data.filter(i => i.channels.some(j => hidden.includes(j.id))).map(i => i.guild.id));
+      setHasHiddenChannels(data.filter(i => i.channels.some(j => hidden.includes(j.id) || hiddenIds.includes(j.parent_id))).map(i => i.guild.id));
     }
   );
 
@@ -52,7 +52,7 @@ export function Settings() {
     }
     dataStore.hiddenChannels = hidden;
     setHiddenChannels([...dataStore.hiddenChannels]);
-    setHasHiddenChannels(data.filter(i => i.channels.some(j => hidden.includes(j.id))).map(i => i.guild.id));
+    setHasHiddenChannels(data.filter(i => i.channels.some(j => hidden.includes(j.id) || hiddenIds.includes(j.parent_id))).map(i => i.guild.id));
   }
 
   React.useEffect(() => {
@@ -77,7 +77,6 @@ export function Settings() {
         channels.push(...hiddenOnes.filter(i => i.type == 4), ...hiddenOnes.filter(i => i.type != 2 && i.type != 4), ...hiddenOnes.filter(i => i.type == 2 && i.type != 4));
         let visibleOnes = GuildChannelStore.getChannels(g.id);
         if (visibleOnes) channels.push(...visibleOnes["4"].map(i => i.channel),...visibleOnes.SELECTABLE.map(i => i.channel), ...visibleOnes.VOCAL.map(i => i.channel));
-        let allChs = [...channels];
         channels = channels.filter((item) => item?.name && (item.type == 4 ? true : item.canBeSeen()));
         return {
           guild: Object.assign(g, {
@@ -89,7 +88,7 @@ export function Settings() {
       .sort((a, b) => b.guild.member_count - a.guild.member_count)
       .filter(i=>!!i.channels.length)
     setData(guilds);
-    setHasHiddenChannels(guilds.filter(i => i.channels.some(j => hiddenIds.includes(j.id))).map(i => i.guild.id));
+    setHasHiddenChannels(guilds.filter(i => i.channels.some(j => hiddenIds.includes(j.id) || hiddenIds.includes(j.parent_id))).map(i => i.guild.id));
   }, []);
 
   return (
