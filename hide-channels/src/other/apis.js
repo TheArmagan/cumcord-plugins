@@ -12,4 +12,4 @@ export const Channel = webpack.findByPrototypes("isManaged");
 export const React = webpack.findByProps("createElement");
 /** @type {{hiddenChannels: string[]}} */
 export const dataStore = data.persist.store;
-export const { categoryExpandAll, categoryCollapseAll } = findByProps("categoryExpandAll", "categoryCollapseAll");
+export const { categoryExpandAll, categoryCollapseAll } = webpack.findByProps("categoryExpandAll", "categoryCollapseAll");

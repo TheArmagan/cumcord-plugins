@@ -33,27 +33,9 @@ export function Settings() {
       let hidden = [...arr];
       dataStore.hiddenChannels = hidden; // nest save
       setHiddenChannels(hidden);
-      setHasHiddenChannels(data.filter(i => i.channels.some(j => hidden.includes(j.id) || hiddenIds.includes(j.parent_id))).map(i => i.guild.id));
+      setHasHiddenChannels(data.filter(i => i.channels.some(j => hidden.includes(j.id) || hidden.includes(j.parent_id))).map(i => i.guild.id));
     }
   );
-
-
-  let toggleAllGuildChannels = (guildId) => {
-    let allChIds = data.find(i => i.guild.id == guildId).channels.map(i => i.id);
-    let allChIdsLength = allChIds.length;
-    let hidden = [...dataStore.hiddenChannels];
-    for (let i = 0; i < allChIdsLength; i++) {
-      const chId = allChIds[i];
-      if (hidden.includes(chId)) {
-        hidden.splice(hidden.indexOf(chId), 1);
-      } else {
-        hidden.push(chId);
-      }
-    }
-    dataStore.hiddenChannels = hidden;
-    setHiddenChannels([...dataStore.hiddenChannels]);
-    setHasHiddenChannels(data.filter(i => i.channels.some(j => hidden.includes(j.id) || hiddenIds.includes(j.parent_id))).map(i => i.guild.id));
-  }
 
   React.useEffect(() => {
     let hiddenIds = [...dataStore.hiddenChannels];
@@ -77,7 +59,7 @@ export function Settings() {
         channels.push(...hiddenOnes.filter(i => i.type == 4), ...hiddenOnes.filter(i => i.type != 2 && i.type != 4), ...hiddenOnes.filter(i => i.type == 2 && i.type != 4));
         let visibleOnes = GuildChannelStore.getChannels(g.id);
         if (visibleOnes) channels.push(...visibleOnes["4"].map(i => i.channel),...visibleOnes.SELECTABLE.map(i => i.channel), ...visibleOnes.VOCAL.map(i => i.channel));
-        channels = channels.filter((item) => item?.name && (item.type == 4 ? true : item.canBeSeen()));
+        channels = channels.filter((item) => item?.name && item.canBeSeen());
         return {
           guild: Object.assign(g, {
             member_count: GuildMemberCountStore.getMemberCount(g.id)
@@ -103,15 +85,6 @@ export function Settings() {
               </div>
             </div>
             <div className="right">
-              <div
-                className={`toggle-all ${!unFoldedGuilds.includes(guild.guild.id) ? "hide" : "" }`}
-                onClick={() => {
-                  toggleAllGuildChannels(guild.guild.id);
-                  categoryExpandAll(guild.guild.id);
-                }}
-              >
-                <ToggleIcon />
-              </div>
               <div
                 className={`fold ${!unFoldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}
                 onClick={() => {

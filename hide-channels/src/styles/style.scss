@@ -41,28 +41,6 @@
       & > .right {
         display: flex;
 
-        & > .toggle-all {
-          width: 18px;
-          height: 26px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          color: #b9bbbe;
-          margin-right: 4px;
-          opacity: 1;
-          transition: opacity 100ms ease-in-out;
-
-          &.hide {
-            opacity: 0;
-          }
-
-          svg {
-            width: 18px;
-            height: 18px;
-          }
-        }
-
         & > .fold {
           width: 26px;
           height: 26px;

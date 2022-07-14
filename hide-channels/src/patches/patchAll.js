@@ -1,7 +1,7 @@
 import patchContainer from "../other/patchContainer";
 
 import patcher from "@cumcord/patcher";
-import { Channel, dataStore, Permissions, PermissionStore } from "../other/apis";
+import { Channel, ChannelStore, dataStore, GuildChannelStore, Permissions, PermissionStore } from "../other/apis";
 
 export async function patchAll() {
   const ogPermissionCan = PermissionStore.can.bind({});
@@ -15,7 +15,7 @@ export async function patchAll() {
     }),
     (() => {
       Channel.prototype.canBeSeen = function() {
-        return ogPermissionCan(Permissions.VIEW_CHANNEL, this);
+        return this.type == 4 ? true : ogPermissionCan(Permissions.VIEW_CHANNEL, this);
       };
       return () => {
         delete Channel.prototype.canBeSeen;
