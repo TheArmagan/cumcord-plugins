@@ -13,15 +13,20 @@ export function Modal({ e }) {
   /** @type {[{guild: any, users: {user: any, state:any}[], channels: {channel: any, users: {user: any, state: any}[]}[]}[], any]} */
   let [data, setData] = React.useState([]);
 
-  let [foldedGuilds, setFoldedGuilds] = React.useState([...dataStore.foldedGuilds]);
+  let [unFoldedGuilds, setUnFoldedGuilds] = React.useState([...dataStore.unFoldedGuilds]);
+
+  let lastUpdate = 0;
 
   function onChange() {
+    if (!(Date.now() - lastUpdate > 1000)) return;
+    lastUpdate = Date.now();
+    let hiddenChannels = !!window["HideChannelsAPI"] ? HideChannelsAPI.getHiddenChannelIds() : [];
     let guildStates = Object.entries(VoiceStateStore.getAllVoiceStates());
     /** @type {{guild: any, users: {user: any, state:any}[], channels: {channel: any, users: {user: any, state: any}[]}[]}[]} */
     let states = guildStates.filter(i=>i[0]!="@me").map(i => ({
       guild: GuildStore.getGuild(i[0]),
       users: Object.entries(i[1]).map(j => {
-        let channel = ChannelStore.getChannel(j[1].channelId);
+        let channel = hiddenChannels.includes(j[1].channelId) ? ChannelStore.getChannel(j[1].channelId) : [];
         return {
           user: UserStore.getUser(j[0]),
           state: channel ? Object.assign(j[1], {
@@ -45,19 +50,23 @@ export function Modal({ e }) {
   }
 
   function toggleFold(guildId) {
-    if (dataStore.foldedGuilds.includes(guildId)) {
-      dataStore.foldedGuilds.splice(dataStore.foldedGuilds.indexOf(guildId), 1);
+    if (dataStore.unFoldedGuilds.includes(guildId)) {
+      dataStore.unFoldedGuilds.splice(dataStore.unFoldedGuilds.indexOf(guildId), 1);
     } else {
-      dataStore.foldedGuilds.push(guildId);
+      dataStore.unFoldedGuilds.push(guildId);
     }
-    dataStore.foldedGuilds = [...dataStore.foldedGuilds]; // nest save
-    setFoldedGuilds([...dataStore.foldedGuilds]);
+    dataStore.unFoldedGuilds = [...dataStore.unFoldedGuilds]; // nest save
+    setUnFoldedGuilds([...dataStore.unFoldedGuilds]);
   }
   
   React.useEffect(() => {
     onChange();
-    VoiceStateStore.addChangeListener(onChange);
-    return () => VoiceStateStore.removeChangeListener(onChange);
+    let interval = setInterval(() => {
+      onChange();
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
   
   return (
@@ -71,7 +80,7 @@ export function Modal({ e }) {
       </ModalComponents.ModalHeader>
       <ModalComponents.ModalContent className="tv--modal-content">
         {
-          data.map((guild) => <div className={`guild ${foldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}>
+          data.map((guild) => <div className={`guild ${unFoldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}>
             <div className="header">
               <div class="info">
                 <div className="icon" style={{ backgroundImage: `url("https://cdn.discordapp.com/icons/${guild.guild.id}/${guild.guild.icon}.png")` }}></div>
@@ -81,7 +90,7 @@ export function Modal({ e }) {
               </div>
               <div className="right">
                 <div
-                  className={`fold ${foldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}
+                  className={`fold ${unFoldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}
                   onClick={() => {
                     toggleFold(guild.guild.id);
                   }}
@@ -93,7 +102,7 @@ export function Modal({ e }) {
             </div>
             <div className={`content ${scrollClasses.thin}`}>
               {
-                foldedGuilds.includes(guild.guild.id) ? null : guild.channels.map(channel => <div className="channel">
+                unFoldedGuilds.includes(guild.guild.id) ? null : guild.channels.map(channel => <div className="channel">
                   <div className="header">
                     <div
                       className="info"

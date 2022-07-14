@@ -11,5 +11,5 @@ export const ModalComponents = webpack.findByProps("ModalCloseButton");
 export const { openModal } = webpack.findByProps("openModal", "openModalLazy");
 export const { TooltipContainer: Tooltip } = webpack.findByProps("TooltipContainer");
 export const FluxDispatcher = webpack.findByProps("isDispatching", "dispatch");
-/** @type {{foldedGuilds: string[]}} */
+/** @type {{unFoldedGuilds: string[]}} */
 export const dataStore = data.persist.store;

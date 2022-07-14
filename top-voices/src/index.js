@@ -6,7 +6,7 @@ import { patchStyles } from "./patches/styles";
 
 export default {
   onLoad() {
-    if (!Array.isArray(dataStore.foldedGuilds)) dataStore.foldedGuilds = [];
+    if (!Array.isArray(dataStore.unFoldedGuilds)) dataStore.unFoldedGuilds = [];
 
     patchHeaderBar();
     patchStyles();
