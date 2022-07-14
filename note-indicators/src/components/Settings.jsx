@@ -27,13 +27,6 @@ export function Settings() {
 
   React.useEffect(async () => {
     onChange();
-    let interval = setInterval(() => {
-      if (!data.length) return;
-      onChange();
-    }, 5000);
-    return () => {
-      clearInterval(interval);
-    };
   }, []);
 
   return <div className="ni--settings">
