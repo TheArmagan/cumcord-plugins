@@ -22,11 +22,11 @@ export function Modal({ e }) {
     let states = guildStates.filter(i=>i[0]!="@me").map(i => ({
       guild: GuildStore.getGuild(i[0]),
       users: Object.entries(i[1]).map(j => {
-        let channel = hiddenChannels.includes(j[1].channelId) ? ChannelStore.getChannel(j[1].channelId) : [];
+        let channel = ChannelStore.getChannel(j[1].channelId);
         return {
           user: UserStore.getUser(j[0]),
           state: channel ? Object.assign(j[1], {
-            channel: channel
+            channel: (hiddenChannels.includes(channel?.id) || hiddenChannels.includes(channel?.parent_id)) ? null : channel
           }) : null
         }
       }).filter(i => i.state)
