@@ -25,11 +25,11 @@ export function Modal({ e }) {
         let channel = ChannelStore.getChannel(j[1].channelId);
         return {
           user: UserStore.getUser(j[0]),
-          state: channel ? Object.assign(j[1], {
+          state: Object.assign(j[1], {
             channel: (hiddenChannels.includes(channel?.id) || hiddenChannels.includes(channel?.parent_id)) ? null : channel
-          }) : null
+          })
         }
-      }).filter(i => i.state)
+      }).filter(i => i?.state?.channel)
     })).sort((a, b)=>b.users.length-a.users.length);
     states.forEach((state) => {
       state.channels = [...(state.users.reduce(
