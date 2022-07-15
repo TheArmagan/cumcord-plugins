@@ -9,7 +9,12 @@ export const GuildChannelStore = webpack.findByProps("getChannels", "getDefaultC
 export const PermissionStore = webpack.findByProps("getChannelPermissions");
 export const { Permissions } = common.constants;
 export const Channel = webpack.findByPrototypes("isManaged");
+export const _ = webpack.findByProps("unset", "debounce");
+export const RelationshipStore = webpack.findByProps("getFriendIDs");
+export const { getCurrentUser } = webpack.findByProps("getCurrentUser");
+export const VoiceStateStore = webpack.findByProps("getVoiceState", "getUserVoiceChannelId");
+export const DiscordSwitch = webpack.findByDisplayName("Switch");
 export const React = webpack.findByProps("createElement");
-/** @type {{hiddenChannels: string[]}} */
+/** @type {{hiddenChannels: string[], settings: {friendsBypass: boolean}}} */
 export const dataStore = data.persist.store;
 export const { categoryExpandAll, categoryCollapseAll } = webpack.findByProps("categoryExpandAll", "categoryCollapseAll");

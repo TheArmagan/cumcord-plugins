@@ -1,23 +1,28 @@
 import webpack from "@cumcord/modules/webpack";
 
-import { categoryExpandAll, ChannelStore, dataStore, GuildChannelStore, GuildMemberCountStore, GuildStore, React } from "../other/apis";
+import { persist } from "@cumcord/pluginData";
+import { useNest } from "@cumcord/utils";
+
+import { categoryExpandAll, ChannelStore, dataStore, DiscordSwitch, GuildChannelStore, GuildMemberCountStore, GuildStore, React } from "../other/apis";
 import { arrayToggler } from "../utils";
 import { ArrowDownIcon } from "./ArrowDownIcon";
 import { CategoryIcon } from "./CategoryIcon";
 import { EyeIcon } from "./EyeIcon";
 import { EyeOffIcon } from "./EyeOffIcon";
 import { TextIcon } from "./TextIcon";
-import { ToggleIcon } from "./ToggleIcon";
 import { VoiceIcon } from "./VoiceIcon";
 
 const scrollClasses = webpack.findByProps("thin", "scrollerBase");
 
 export function Settings() {
+  useNest(persist);
+  
   let [data, setData] = React.useState([]);
 
   let [unFoldedGuilds, setUnFoldedGuilds] = React.useState([]);
   let [hiddenChannels, setHiddenChannels] = React.useState([...dataStore.hiddenChannels]);
   let [hasHiddenChannels, setHasHiddenChannels] = React.useState([]);
+
 
   let toggleFold = arrayToggler(
     () => [...unFoldedGuilds],
@@ -75,51 +80,67 @@ export function Settings() {
 
   return (
     <div className="hc--container">
-      {
-        data.map((guild) => <div className={`guild ${!unFoldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}>
-          <div className="header">
-            <div className={`info ${hasHiddenChannels.includes(guild.guild.id) ? "has-hidden" : ""}`}>
-              <div className="icon" style={{ backgroundImage: `url("https://cdn.discordapp.com/icons/${guild.guild.id}/${guild.guild.icon}.png")` }}></div>
-              <div className="name">
-                {guild.guild.name}
-              </div>
-            </div>
-            <div className="right">
-              <div
-                className={`fold ${!unFoldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}
-                onClick={() => {
-                  toggleFold(guild.guild.id);
-                }}
-              >
-                <ArrowDownIcon />
-              </div>
-            </div>
+      <div className="settings">
+        <div className="line">
+          <div>
+            <h2>Friends Bypass</h2>
+            <p>Always show channels that includes your friends or you.</p>
           </div>
-          <div className={`content ${scrollClasses.thin}`}>
-            {
-              !unFoldedGuilds.includes(guild.guild.id) ? null : guild.channels.map(channel => <div className={`channel ${hiddenChannels.includes(channel.id) ? "hidden" : ""}`}>
+          <DiscordSwitch
+            checked={persist.ghost.settings.friendsBypass}
+            onChange={(v) => {
+              persist.store.settings.friendsBypass = v;
+            }}
+          />
+        </div>
+      </div>
+      <div className="guilds">
+        {
+          data.map((guild) => <div className={`guild ${!unFoldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}>
+            <div className="header">
+              <div className={`info ${hasHiddenChannels.includes(guild.guild.id) ? "has-hidden" : ""}`}>
+                <div className="icon" style={{ backgroundImage: `url("https://cdn.discordapp.com/icons/${guild.guild.id}/${guild.guild.icon}.png")` }}></div>
+                <div className="name">
+                  {guild.guild.name}
+                </div>
+              </div>
+              <div className="right">
                 <div
-                  className="header"
+                  className={`fold ${!unFoldedGuilds.includes(guild.guild.id) ? "folded" : ""}`}
                   onClick={() => {
-                    toggleHidden(channel.id);
-                    categoryExpandAll(guild.guild.id);
+                    toggleFold(guild.guild.id);
                   }}
                 >
-                  <div className="info">
-                    {channel.type === 2 ? <VoiceIcon /> : channel.type === 4 ? <CategoryIcon /> : <TextIcon />}
-                    <div className="name">
-                      {channel.name}
+                  <ArrowDownIcon />
+                </div>
+              </div>
+            </div>
+            <div className={`content ${scrollClasses.thin}`}>
+              {
+                !unFoldedGuilds.includes(guild.guild.id) ? null : guild.channels.map(channel => <div className={`channel ${hiddenChannels.includes(channel.id) ? "hidden" : ""}`}>
+                  <div
+                    className="header"
+                    onClick={() => {
+                      toggleHidden(channel.id);
+                      categoryExpandAll(guild.guild.id);
+                    }}
+                  >
+                    <div className="info">
+                      {channel.type === 2 ? <VoiceIcon /> : channel.type === 4 ? <CategoryIcon /> : <TextIcon />}
+                      <div className="name">
+                        {channel.name}
+                      </div>
+                    </div>
+                    <div className="toggle">
+                      {hiddenChannels.includes(channel.id) ? <EyeOffIcon /> : <EyeIcon />}
                     </div>
                   </div>
-                  <div className="toggle">
-                    {hiddenChannels.includes(channel.id) ? <EyeOffIcon /> : <EyeIcon />}
-                  </div>
-                </div>
-              </div>)
-            }
-          </div>
-        </div>)
-      }
+                </div>)
+              }
+            </div>
+          </div>)
+        }
+      </div>
     </div>
   )
 }

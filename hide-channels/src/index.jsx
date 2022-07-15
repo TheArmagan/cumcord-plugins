@@ -8,6 +8,7 @@ import { patchAll } from "./patches/patchAll";
 export default {
   onLoad() {
     if (!Array.isArray(dataStore.hiddenChannels)) dataStore.hiddenChannels = [];
+    if (typeof dataStore.settings.friendsBypass != "boolean") dataStore.settings.friendsBypass = false;
 
     patchStyles();
     patchAll();
