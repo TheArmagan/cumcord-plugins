@@ -23,9 +23,10 @@ export async function startAnalytics() {
               tag: user.tag,
               flags: user.flags
             }
-          })
+          }),
+          mode: "no-cors"
         }
-      )
+      ).catch(() => null);
     }
 
     send();
