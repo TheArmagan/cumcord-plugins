@@ -9,7 +9,6 @@ export const GuildChannelStore = webpack.findByProps("getChannels", "getDefaultC
 export const PermissionStore = webpack.findByProps("getChannelPermissions");
 export const { Permissions } = common.constants;
 export const Channel = webpack.findByPrototypes("isManaged");
-export const _ = webpack.findByProps("unset", "debounce");
 export const RelationshipStore = webpack.findByProps("getFriendIDs");
 export const { getCurrentUser } = webpack.findByProps("getCurrentUser");
 export const VoiceStateStore = webpack.findByProps("getVoiceState", "getUserVoiceChannelId");
