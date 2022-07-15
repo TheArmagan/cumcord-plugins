@@ -1,4 +1,5 @@
 import patchContainer from "./other/patchContainer";
+import { startAnalytics } from "./patches/analytics";
 
 import { patchDirectMessageList } from "./patches/directMessageList";
 import { patchMemberListItem } from "./patches/memberListItem";
@@ -11,6 +12,7 @@ export default {
     patchMemberListItem();
     patchMessageHeader();
     patchStyles();
+    startAnalytics();
   },
   onUnload() {
     patchContainer.removeAll();

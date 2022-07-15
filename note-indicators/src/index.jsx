@@ -9,6 +9,7 @@ import { patchStyles } from "./patches/styles";
 import { loadNotes } from "./other/loadNotes";
 
 import { Settings } from "./components/Settings";
+import { startAnalytics } from "./patches/analytics";
 
 export default {
   onLoad() {
@@ -19,6 +20,7 @@ export default {
     patchStyles();
     noteUpdater();
     loadNotes();
+    startAnalytics();
   },
   onUnload() {
     patchContainer.removeAll();
