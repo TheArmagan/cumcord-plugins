@@ -41,7 +41,11 @@
 
 [class*="message-"] [class*="headerText-"],
 [class*="message-"] h2[class*="header-"],
-[class*="nameTag-"] {
+[class*="topSection-"] [class*="nameTag-"] {
   display: flex;
   align-items: center;
+}
+
+[class*="topSection-"] [class*="nameTag-"] * {
+  overflow: hidden;
 }
