@@ -1,7 +1,7 @@
 import { ChannelStore, GuildStore, UserStore, VoiceStateStore } from "./apis";
 
 /**
- * @typedef {{states: {deaf:boolean,mute:boolean,selfDeaf:boolean,selfMute:boolean,selfStream:boolean,selfVideo:boolean,suppress:boolean},user:{id:string,tag:string},channel:{id:string,name:string},guild:{id:string,name:string}}} VoiceStateShaped
+ * @typedef {{states: {deaf:boolean,mute:boolean,selfDeaf:boolean,selfMute:boolean,selfStream:boolean,selfVideo:boolean,suppress:boolean},isPrivate:boolean,user:{id:string,tag:string},channel:{id:string,name:string},guild:{id:string,name:string}}} VoiceStateShaped
  */
 
 /**
@@ -26,12 +26,12 @@ export function getUserVoiceStateShaped(userId) {
   return state ? makeShape(state) : null;
 }
 
+window.getUserVoiceStateShaped = getUserVoiceStateShaped;
+
 /** @returns {VoiceStateShaped} */
 function makeShape(i) {
   let channel = ChannelStore.getChannel(i.channelId);
-  if (!channel) return null;
-  let guild = GuildStore.getGuild(channel.guild_id);
-  if (!guild) return null;
+  let guild = GuildStore.getGuild(channel?.guild_id);
   return {
     states: {
       deaf: i.deaf,
@@ -42,17 +42,18 @@ function makeShape(i) {
       selfVideo: i.selfVideo,
       suppress: i.suppress
     },
+    isPrivate: !guild,
     user: {
       id: i.userId,
       tag: UserStore.getUser(i.userId).tag
     },
-    channel: {
+    channel: channel ? {
       id: channel.id,
       name: channel.name
-    },
-    guild: {
+    } : undefined,
+    guild: guild ? {
       id: guild.id,
       name: guild.name
-    }
+    } : undefined
   }
 }

@@ -35,14 +35,14 @@ export function Indicator({ userId }) {
     <div className="vi--container">
       <Tooltip
         key={`vi--tooltip-${userId}`}
-        text={`${data.inMyGuilds ? "✅" : "❌"} ${data.state.guild.name} > ${data.state.channel.name}`}
+        text={data.state.isPrivate ? `❌ In Private Call` : `${data.inMyGuilds ? "✅" : "❌"} ${data.state.guild.name} > ${data.state.channel.name}`}
         position="top"
         className="vi--tooltip"
       >
         <span
-          className={`vi--icon-container ${!data.inMyGuilds ? "vi--cant-join" : ""}`}
+          className={`vi--icon-container ${(!data.inMyGuilds || data.state.isPrivate) ? "vi--cant-join" : ""}`}
           onClick={(e) => {
-            if (!data.inMyGuilds) return;
+            if (!data.inMyGuilds || data.state.isPrivate) return;
             e.preventDefault();
             Router.transitionTo(`/channels/${data.state.guild.id}/${data.state.channel.id}`);
           }}
