@@ -1,52 +1,62 @@
 import webpack from "@cumcord/modules/webpack";
+import { events } from "../connection/events";
+import { fetchUserVoiceStates } from "../other/api";
 
-import { ChannelStore, GuildStore, VoiceStateStore, React, Router } from "../other/apis";
+import { GuildStore, React, Router } from "../other/apis";
 import { COLORS } from "../other/constants";
 
 import { DeafIcon } from "./DeafIcon";
 import { MuteIcon } from "./MuteIcon";
+import { VideoIcon } from "./VideoIcon";
 import { VoiceIcon } from "./VoiceIcon";
 
 const { TooltipContainer: Tooltip } = webpack.findByProps("TooltipContainer");
 
 export function Indicator({ userId }) {
-  let [data, setData] = React.useState({ guild: null, channel: null, state: null });
+  /** @type {[{state: import("../other/VoiceStates").VoiceStateShaped, inMyGuilds: boolean}, any]} */
+  let [data, setData] = React.useState({ state: null, inMyGuilds: false });
+  let fetching = false;
 
-  function onChange() {
-    let voiceState = VoiceStateStore.getVoiceStateForUser(userId);
-    if (!voiceState) return setData({ guild: null, channel: null, state: null });
-    let channel = ChannelStore.getChannel(voiceState?.channelId);
-    let guild = GuildStore.getGuild(channel?.guild_id);
-    setData({ guild, channel, state: voiceState });
+  async function onChange() {
+    if (fetching) return;
+    fetching = true;
+    let state = await fetchUserVoiceStates(userId);
+    fetching = false;
+    setData({ state, inMyGuilds: !!GuildStore.getGuild(state?.guild?.id) });
   }
 
   React.useEffect(() => {
     onChange();
-    VoiceStateStore.addChangeListener(onChange);
-    return () => VoiceStateStore.removeChangeListener(onChange);
-  }, [])
+    events.on("check", onChange);
+    return () => events.off("check", onChange);
+  }, []);
 
-  return !data?.guild ? null : (
+  return !data?.state ? null : (
     <div className="vi--container">
       <Tooltip
         key={`vi--tooltip-${userId}`}
-        text={`${data.guild.name} > ${data.channel.name}`}
+        text={`${data.inMyGuilds ? "✅" : "❌"} ${data.state.guild.name} > ${data.state.channel.name}`}
         position="top"
         className="vi--tooltip"
       >
         <span
-          className="vi--icon-container"
+          className={`vi--icon-container ${!data.inMyGuilds ? "vi--cant-join" : ""}`}
           onClick={(e) => {
+            if (!data.inMyGuilds) return;
             e.preventDefault();
-            Router.transitionTo(`/channels/${data.guild.id}/${data.channel.id}`);
+            Router.transitionTo(`/channels/${data.state.guild.id}/${data.state.channel.id}`);
           }}
         >
           {
-            data.state.isVoiceDeafened()
-              ? <DeafIcon color={COLORS[data.state.deaf ? "DANGER" : "SECONDARY"]}></DeafIcon>
-              : data.state.isVoiceMuted()
-                ? <MuteIcon color={COLORS[data.state.mute ? "DANGER" : "SECONDARY"]}></MuteIcon>
-                : <VoiceIcon color={COLORS.SECONDARY}></VoiceIcon>
+            (data.state.states.selfDeaf || data.state.states.deaf)
+              ? <DeafIcon color={COLORS[data.state.states.deaf ? "DANGER" : "SECONDARY"]} />
+              : (data.state.states.selfMute || data.state.states.mute || data.state.states.suppress)
+                ? <MuteIcon color={COLORS[data.state.states.mute ? "DANGER" : "SECONDARY"]} />
+                : data.state.states.selfVideo
+                  ? <VideoIcon color={COLORS.SECONDARY} />
+                  : data.state.states.selfStream
+                    ? <div className="v--icon vi--red-dot" />
+                    : <VoiceIcon color={COLORS.SECONDARY} />
           }
         </span>
       </Tooltip>
