@@ -41,11 +41,13 @@
 
 [class*="message-"] [class*="headerText-"],
 [class*="message-"] h2[class*="header-"],
-[class*="topSection-"] [class*="nameTag-"] {
+[class*="topSection-"] [class*="nameTag-"],
+[class*="headerTop-"] [class*="nameTag-"] {
   display: flex;
   align-items: center;
 }
 
-[class*="topSection-"] [class*="nameTag-"] * {
+[class*="topSection-"] [class*="nameTag-"] *,
+[class*="headerTop-"] [class*="nameTag-"] * {
   overflow: hidden;
 }
