@@ -4,7 +4,6 @@ import { FluxDispatcher, NoteStore, React } from "../other/apis";
 import { cache } from "../other/cache";
 import { Indicator } from "./Indicator";
 
-const scrollClasses = webpack.findByProps("thin", "scrollerBase");
 const { getUser } = webpack.findByProps("fetchProfile", "getUser");
 
 export function Settings() {
