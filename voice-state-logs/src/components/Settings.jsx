@@ -22,7 +22,7 @@ export function Settings() {
   function onChange() {
     let value = nest.ghost.stateHistory
       .filter(state => {
-        let search = nest.store.searchText.trim();
+        let search = nest.store.searchText.trim().toLowerCase();
         if (!search) return true;
         return state.guild?.name?.toLowerCase?.()?.includes(search)
           || state?.guild?.id == search
