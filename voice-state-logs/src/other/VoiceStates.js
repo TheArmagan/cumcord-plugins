@@ -1,3 +1,4 @@
+import chillout from "chillout";
 import { ChannelStore, GuildStore, UserStore, VoiceStateStore } from "./apis";
 
 /**
@@ -5,18 +6,30 @@ import { ChannelStore, GuildStore, UserStore, VoiceStateStore } from "./apis";
  */
 
 /**
- * @returns {{[id:string]: VoiceStateShaped}}
+ * @returns {Promise<{[id:string]: VoiceStateShaped}>}
  */
-export function getAllVoiceStatesShaped() {
-  return Object.fromEntries(
-    Object.values(VoiceStateStore.getAllVoiceStates())
-      .map((i) => Object.values(i))
-      .flat()
-      .map((i) => [
-        i.userId,
-        makeShape(i)
-      ]).filter(i=>i[1])
-  );
+export async function getAllVoiceStatesShaped() {
+  let result = [];
+  await chillout.forEach(Object.values(VoiceStateStore.getAllVoiceStates() || {}), async (usersObject) => {
+    await chillout.forEach(Object.values(usersObject || {}), (state) => {
+      let shape = makeShape(state);
+      if (shape) result.push([state.userId, shape]);
+    });
+  });
+  return Object.fromEntries(result);
+}
+
+/**
+ * @returns {Promise<string[]>}
+ */
+export async function getAllVoiceUserIds() {
+  let result = new Set();
+  await chillout.forEach(Object.values(VoiceStateStore.getAllVoiceStates() || {}), async (usersObject) => {
+    await chillout.forEach(Object.values(usersObject || {}), (state) => {
+      result.add(state.userId);
+    });
+  });
+  return [...result];
 }
 
 /** @returns {VoiceStateShaped?} */
@@ -25,7 +38,22 @@ export function getUserVoiceStateShaped(userId) {
   return state ? makeShape(state) : null;
 }
 
-window.getUserVoiceStateShaped = getUserVoiceStateShaped;
+/**
+ * @param {VoiceStateShaped} state 
+ * @return {string}
+ */
+export function shapedStateToString(state) {
+  if (!state) return "null";
+  let s = [
+    `user:${state.user.id}`,
+    `guild:${state.guild?.id || null}`,
+    `channel:${state.channel?.id || null}`
+  ];
+  for (const key in state.states) {
+    s.push(`${key}:${state.states[key]}`);
+  }
+  return s.join(";");
+}
 
 /** @returns {VoiceStateShaped} */
 function makeShape(i) {

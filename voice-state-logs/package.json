@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "chillout": "^5.0.0",
+    "nests": "^2.3.1"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Voice State Logs",
+  "description": "See history of voice states. (armagan.rest)",
+  "author": "TheArmagan",
+  "file": "src/index.jsx",
+  "license": "GNU General Public License Version 3"
+}
