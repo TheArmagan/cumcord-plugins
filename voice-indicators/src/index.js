@@ -1,6 +1,5 @@
 import { websocket } from "./connection/websocket";
 import patchContainer from "./other/patchContainer";
-import { startAnalytics } from "./patches/analytics";
 
 import { patchDirectMessageList } from "./patches/directMessageList";
 import { patchMemberListItem } from "./patches/memberListItem";
@@ -15,7 +14,6 @@ export default {
     patchMessageHeader();
     patchDiscordTag();
     patchStyles();
-    startAnalytics();
   },
   onUnload() {
     patchContainer.removeAll();

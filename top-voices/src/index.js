@@ -3,7 +3,6 @@ import patchContainer from "./other/patchContainer";
 
 import { patchHeaderBar } from "./patches/headerBar";
 import { patchStyles } from "./patches/styles";
-import { startAnalytics } from "./patches/analytics";
 
 export default {
   onLoad() {
@@ -11,7 +10,6 @@ export default {
 
     patchHeaderBar();
     patchStyles();
-    startAnalytics();
   },
   onUnload() {
     patchContainer.removeAll();
