@@ -1,0 +1,7 @@
+{
+  "name": "Imagine Being Discord Mod",
+  "description": "Get moderator perms (client-sided) on any guild. (armagan.rest)",
+  "author": "TheArmagan",
+  "file": "src/index.js",
+  "license": "GNU General Public License Version 3"
+}
