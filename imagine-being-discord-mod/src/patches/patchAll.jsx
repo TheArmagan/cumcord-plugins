@@ -27,7 +27,7 @@ export async function patchAll() {
           icon={PrivacyAndSafetyShield}
           action={() => {
             let guild = GuildStore.getGuild(guildId);
-            let memberDispatch = { type: "GUILD_MEMBER_UPDATE", guildId: guild, roles: guild.roles, user: getCurrentUser() };
+            let memberDispatch = { type: "GUILD_MEMBER_UPDATE", guildId: guild, roles: Object.keys(guild.roles), user: getCurrentUser() };
             FluxDispatcher.dirtyDispatch(memberDispatch);
             setTimeout(() => {
               FluxDispatcher.dirtyDispatch({ type: "VIEW_AS_ROLES_UPDATE", guildId, roles: [], options: {} });
