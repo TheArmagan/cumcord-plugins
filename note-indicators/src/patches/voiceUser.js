@@ -13,8 +13,7 @@ export function patchVoiceUser() {
   const classes = cumcord.modules.webpack.findByProps("icons", "usernameSpeaking");
 
   const patch = patcher.after("render", VoiceUser.default.prototype, (_, returnValue) => {
-    let tree = returnValue?.props?.children?.props?.children;
-    let userId = tree?.[1]?.props?.style?.backgroundImage?.split("/")?.[4];
+    let userId = returnValue?.props?.value ? returnValue?.props?.value : returnValue?.props?.children?.props?.children?.[1]?.props?.style?.backgroundImage?.split("/")?.[4];
     return h(UserContext.Provider, {
       value: userId
     }, returnValue);
