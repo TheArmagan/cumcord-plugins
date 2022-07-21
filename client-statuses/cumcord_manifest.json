@@ -1,0 +1,7 @@
+{
+  "name": "Client Statuses",
+  "description": "Show the platform indicators right side of the user names. (armagan.rest)",
+  "author": "TheArmagan",
+  "file": "src/index.js",
+  "license": "GNU General Public License Version 3"
+}

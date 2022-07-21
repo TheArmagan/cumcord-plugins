@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "websocket-ts": "^1.1.1"
+  }
+}
