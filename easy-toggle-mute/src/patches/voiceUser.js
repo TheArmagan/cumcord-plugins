@@ -14,7 +14,11 @@ export function patchVoiceUser() {
       returnValue.props.onClick = function(e) {
         if (!e.shiftKey) return ogClick.call(this, e);
         e.preventDefault();
-        userId == currentUserId ? toggleSelfMute() : toggleLocalMute(userId);
+        if (userId == currentUserId) {
+          toggleSelfMute();
+        } else {
+          toggleLocalMute(userId);
+        }
       }
     }
   });
