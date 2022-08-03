@@ -10,8 +10,6 @@ export async function patchAll() {
   let PrivacyAndSafetyShield = webpack.findByDisplayName("PrivacyAndSafetyShield")
 
   let patch = patcher.before("default", DiscordMenu, function([props]) {
-    // console.log({ props });
-    // window._props = props ?? window._props;
 
     if (
       props?.navId == "guild-header-popout"
@@ -28,10 +26,10 @@ export async function patchAll() {
           action={() => {
             let guild = GuildStore.getGuild(guildId);
             let memberDispatch = { type: "GUILD_MEMBER_UPDATE", guildId, roles: Object.keys(guild.roles), user: getCurrentUser() };
-            FluxDispatcher.dirtyDispatch(memberDispatch);
+            FluxDispatcher.dispatch(memberDispatch);
             setTimeout(() => {
-              FluxDispatcher.dirtyDispatch({ type: "VIEW_AS_ROLES_UPDATE", guildId, roles: [], options: {} });
-              setTimeout(() => FluxDispatcher.dirtyDispatch(memberDispatch), 10);
+              FluxDispatcher.dispatch({ type: "VIEW_AS_ROLES_UPDATE", guildId, roles: [], options: {} });
+              setTimeout(() => FluxDispatcher.dispatch(memberDispatch), 10);
             }, 10);
           }}
         />
