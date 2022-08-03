@@ -25,8 +25,6 @@ export function getUserVoiceStateShaped(userId) {
   return state ? makeShape(state) : null;
 }
 
-window.getUserVoiceStateShaped = getUserVoiceStateShaped;
-
 /** @returns {VoiceStateShaped} */
 function makeShape(i) {
   let channel = ChannelStore.getChannel(i.channelId);
@@ -46,7 +44,7 @@ function makeShape(i) {
       id: i.userId,
       tag: UserStore.getUser(i.userId).tag
     },
-    channel: channel ? {
+    channel: channel && guild ? {
       id: channel.id,
       name: channel.name
     } : undefined,
