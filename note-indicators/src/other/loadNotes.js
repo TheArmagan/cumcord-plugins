@@ -9,7 +9,7 @@ export async function loadNotes() {
     for (const userId in req.body) {
       let note = req.body[userId];
       if (!note) continue;
-      FluxDispatcher.dirtyDispatch({
+      FluxDispatcher.dispatch({
         type: "USER_NOTE_LOADED",
         userId,
         note: { note, loading: false }
