@@ -4,7 +4,7 @@ import { FluxDispatcher, NoteStore, React } from "../other/apis";
 import { cache } from "../other/cache";
 import { Indicator } from "./Indicator";
 
-const { getUser } = webpack.findByProps("fetchProfile", "getUser");
+const { getUser } = webpack.findByProps("getUser");
 
 export function Settings() {
   let [data, setData] = React.useState([]);
