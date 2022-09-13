@@ -68,7 +68,5 @@ export function awaitResponse(name, data, timeout = Infinity) {
   });
 }
 
-window.awaitResponse = awaitResponse;
-
 
 

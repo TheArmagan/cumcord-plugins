@@ -8,16 +8,15 @@
   cursor: pointer;
   width: 20px;
   height: 20px;
-}
 
-.vi--icon-container.vi--cant-join {
-  cursor: not-allowed;
-  opacity: 0.5;
+  &.vi--cant-join {
+    opacity: 0.75;
+  }
 }
 
 .vi--container {
   display: flex;
-  width: min-width;
+  width: min-content;
 }
 
 .vi--icon {
@@ -25,6 +24,10 @@
   width: 16px;
   height: 16px;
   transition: filter 100ms ease-in-out;
+
+  &:hover {
+    filter: brightness(1.2);
+  }
 }
 
 .vi--red-dot {
@@ -35,9 +38,6 @@
   box-shadow: 0px 0px 4px #ed4245;
 }
 
-.vi--icon:hover {
-  filter: brightness(1.2);
-}
 
 [class*="message-"] [class*="headerText-"],
 [class*="message-"] h2[class*="header-"],

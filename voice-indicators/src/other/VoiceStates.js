@@ -19,6 +19,12 @@ export function getAllVoiceStatesShaped() {
   );
 }
 
+/** @returns {{id: string, tag: string}[]} */
+export function getVoiceChannelMembers(channelId) {
+  let states = VoiceStateStore.getVoiceStatesForChannel(channelId);
+  return states ? Object.keys(states).map(i => ({ id: i, tag: UserStore.getUser(i).tag })) : null;
+}
+
 /** @returns {VoiceStateShaped?} */
 export function getUserVoiceStateShaped(userId) {
   let state = VoiceStateStore.getVoiceStateForUser(userId);
@@ -29,6 +35,7 @@ export function getUserVoiceStateShaped(userId) {
 function makeShape(i) {
   let channel = ChannelStore.getChannel(i.channelId);
   let guild = GuildStore.getGuild(channel?.guild_id);
+  let user = UserStore.getUser(i.userId);
   return {
     states: {
       deaf: i.deaf,
@@ -42,15 +49,18 @@ function makeShape(i) {
     isPrivate: !guild,
     user: {
       id: i.userId,
-      tag: UserStore.getUser(i.userId).tag
+      tag: user.tag,
+      avatar: user?.avatar
     },
-    channel: channel && guild ? {
+    channel: channel ? {
       id: channel.id,
-      name: channel.name
+      name: channel.name || [channel.rawRecipients.map(i => i.username), UserStore.getCurrentUser().username].sort((a, b)=>b > a).join(", ") || "Unknown"
     } : undefined,
     guild: guild ? {
       id: guild.id,
-      name: guild.name
+      name: guild.name,
+      vanity: guild?.vanityURLCode,
+      icon: guild?.icon
     } : undefined
   }
 }

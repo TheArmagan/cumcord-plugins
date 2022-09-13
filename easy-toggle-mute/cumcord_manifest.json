@@ -1,7 +1,0 @@
-{
-  "name": "Easy Toggle Mute",
-  "description": "Easily toggle mute of users in voice chat by shift+click. (armagan.rest)",
-  "author": "TheArmagan",
-  "file": "src/index.js",
-  "license": "GNU General Public License Version 3"
-}

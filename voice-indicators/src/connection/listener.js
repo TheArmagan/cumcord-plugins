@@ -1,4 +1,4 @@
-import { getAllVoiceStatesShaped, getUserVoiceStateShaped } from "../other/VoiceStates";
+import { getAllVoiceStatesShaped, getUserVoiceStateShaped, getVoiceChannelMembers } from "../other/VoiceStates";
 
 export async function onCallbackEvent(eventName, eventData, cb) {
   switch (eventName) {
@@ -12,6 +12,11 @@ export async function onCallbackEvent(eventName, eventData, cb) {
     }
     case "voiceState": {
       cb({ ok: true, data: getUserVoiceStateShaped(eventData) });
+      break;
+    }
+    case "voiceMembers": {
+      cb({ ok: true, data: getVoiceChannelMembers(eventData) })
+      break;
     }
   }
 }
