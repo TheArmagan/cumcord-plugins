@@ -54,7 +54,7 @@ function makeShape(i) {
     },
     channel: channel ? {
       id: channel.id,
-      name: channel.name || [channel.rawRecipients.map(i => i.username), UserStore.getCurrentUser().username].sort((a, b)=>b > a).join(", ") || "Unknown"
+      name: channel.name || [channel.rawRecipients, UserStore.getCurrentUser()].map(i=>`${i.username}#${i.discriminator}`).sort((a, b)=>a > b).join(", ") || "Unknown"
     } : undefined,
     guild: guild ? {
       id: guild.id,
