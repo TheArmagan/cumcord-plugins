@@ -35,7 +35,7 @@ export function Indicator({ userId }) {
     <div className="vi--container">
       <Tooltip
         key={`vi--tooltip-${userId}`}
-        text={data.state.isPrivate ? `❌ In Private Call` : `${data.inMyGuilds ? "✅" : "❌"} ${data.state.guild.name} > ${data.state.channel.name}`}
+        text={`${data.inMyGuilds ? "✅" : "❌"} ${data.state.guild ? data.state.guild.name : "In Private Call"} > ${data.state.channel.name}`}
         position="top"
         className="vi--tooltip"
       >
