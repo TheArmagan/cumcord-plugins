@@ -51,7 +51,7 @@ export function Modal({ e, data }) {
               >
                 <DiscordTooltip
                   key={`vi--tooltip-show-channel`}
-                  text={data.inMyChannels ? "Join Guild" : "Can't Join Guild"}
+                  text="Join Guild"
                   position="top"
                   className="vi--tooltip"
                 >
