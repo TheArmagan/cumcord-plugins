@@ -134,7 +134,8 @@ export function Modal({ e, data }) {
                     </div>
                     <div className="state vi--icon-container">
                       {
-                        (member.states.selfDeaf || member.states.deaf)
+                        !member.states ? null :
+                          (member.states.selfDeaf || member.states.deaf)
                           ? <DeafIcon color={COLORS[member.states.deaf ? "DANGER" : "SECONDARY"]} />
                           : (member.states.selfMute || member.states.mute || member.states.suppress)
                             ? <MuteIcon color={COLORS[member.states.mute ? "DANGER" : "SECONDARY"]} />
