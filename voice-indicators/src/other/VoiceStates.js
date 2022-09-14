@@ -30,7 +30,7 @@ export function getVoiceChannelMembers(channelId) {
       tag: u?.tag,
       avatar: u?.avatar
     }
-  }).filter(i=>i?.id) : null;
+  }).filter(i=>i?.id) : [];
 }
 
 /** @returns {VoiceStateShaped?} */
