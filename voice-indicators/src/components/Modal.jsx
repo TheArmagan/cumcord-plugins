@@ -132,20 +132,22 @@ export function Modal({ e, data }) {
                       <div className="name">{member.tag.split("#")[0]}</div>
                       <div className="discriminator">#{member.tag.split("#")[1]}</div>
                     </div>
-                    <div className="state vi--icon-container">
-                      {
-                        !member.states ? null :
+                    {member?.states ? 
+                      <div className="state vi--icon-container">
+                        {
                           (member.states.selfDeaf || member.states.deaf)
-                          ? <DeafIcon color={COLORS[member.states.deaf ? "DANGER" : "SECONDARY"]} />
-                          : (member.states.selfMute || member.states.mute || member.states.suppress)
-                            ? <MuteIcon color={COLORS[member.states.mute ? "DANGER" : "SECONDARY"]} />
-                            : member.states.selfVideo
-                              ? <VideoIcon color={COLORS.SECONDARY} />
-                              : member.states.selfStream
-                                ? <div className="v--icon vi--red-dot" />
-                                : <VoiceIcon color={COLORS.SECONDARY} />
-                      }
-                    </div>
+                            ? <DeafIcon color={COLORS[member.states.deaf ? "DANGER" : "SECONDARY"]} />
+                            : (member.states.selfMute || member.states.mute || member.states.suppress)
+                              ? <MuteIcon color={COLORS[member.states.mute ? "DANGER" : "SECONDARY"]} />
+                              : member.states.selfVideo
+                                ? <VideoIcon color={COLORS.SECONDARY} />
+                                : member.states.selfStream
+                                  ? <div className="v--icon vi--red-dot" />
+                                  : <VoiceIcon color={COLORS.SECONDARY} />
+                        }
+                      </div> 
+                      : null
+                    }
                   </div>
                 </div>
               ))}
