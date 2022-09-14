@@ -28,7 +28,8 @@ export function getVoiceChannelMembers(channelId) {
     return {
       id: u?.id,
       tag: u?.tag,
-      avatar: u?.avatar
+      avatar: u?.avatar,
+      states: getUserVoiceStateShaped(u?.id)?.states
     }
   }).filter(i=>i?.id) : [];
 }

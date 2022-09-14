@@ -4,7 +4,10 @@ import { fetchVoiceMembers } from "../other/api";
 import { DiscordTooltip, fetchUser, FluxDispatcher, InviteStore, ModalComponents, Router, selectVoiceChannel } from "../other/apis";
 import { COLORS } from "../other/constants";
 import { ArrowIcon } from "./ArrowIcon";
+import { DeafIcon } from "./DeafIcon";
 import { JoinCallIcon } from "./JoinCallIcon";
+import { MuteIcon } from "./MuteIcon";
+import { VideoIcon } from "./VideoIcon";
 import { VoiceIcon } from "./VoiceIcon";
 
 const scrollClasses = webpack.findByProps("thin", "scrollerBase");
@@ -124,9 +127,24 @@ export function Modal({ e, data }) {
                   }}
                 >
                   <div className="avatar" style={{ backgroundImage: `url("${member.avatar ? `https://cdn.discordapp.com/avatars/${member.id}/${member.avatar}.png?size=128` : `https://cdn.discordapp.com/embed/avatars/${Number(member.tag.split("#")[1]) % 5}.png`}")` }}></div>
-                  <div className="name-container">
-                    <div className="name">{member.tag.split("#")[0]}</div>
-                    <div className="discriminator">#{member.tag.split("#")[1]}</div>
+                  <div className="about">
+                    <div className="name-container">
+                      <div className="name">{member.tag.split("#")[0]}</div>
+                      <div className="discriminator">#{member.tag.split("#")[1]}</div>
+                    </div>
+                    <div className="state vi--icon-container">
+                      {
+                        (member.states.selfDeaf || member.states.deaf)
+                          ? <DeafIcon color={COLORS[member.states.deaf ? "DANGER" : "SECONDARY"]} />
+                          : (member.states.selfMute || member.states.mute || member.states.suppress)
+                            ? <MuteIcon color={COLORS[member.states.mute ? "DANGER" : "SECONDARY"]} />
+                            : member.states.selfVideo
+                              ? <VideoIcon color={COLORS.SECONDARY} />
+                              : member.states.selfStream
+                                ? <div className="v--icon vi--red-dot" />
+                                : <VoiceIcon color={COLORS.SECONDARY} />
+                      }
+                    </div>
                   </div>
                 </div>
               ))}
