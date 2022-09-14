@@ -1,7 +1,8 @@
 import { ChannelStore, GuildStore, UserStore, VoiceStateStore } from "./apis";
+import { persist } from "@cumcord/pluginData";
 
 /**
- * @typedef {{states: {deaf:boolean,mute:boolean,selfDeaf:boolean,selfMute:boolean,selfStream:boolean,selfVideo:boolean,suppress:boolean},isPrivate:boolean,user:{id:string,tag:string},channel:{id:string,name:string},guild:{id:string,name:string}}} VoiceStateShaped
+ * @typedef {{states:{deaf:boolean,mute:boolean,selfDeaf:boolean,selfMute:boolean,selfStream:boolean,selfVideo:boolean,suppress:boolean},isPrivate:boolean,user:{id:string,tag:string,avatar:string},channel:{id:string,name:string,icon:string,redacted:boolean},guild:{id:string,name:string,icon:string}}} VoiceStateShaped
  */
 
 /**
@@ -19,10 +20,17 @@ export function getAllVoiceStatesShaped() {
   );
 }
 
-/** @returns {{id: string, tag: string}[]} */
+/** @returns {{id: string, tag: string, avatar: string}[]} */
 export function getVoiceChannelMembers(channelId) {
   let states = VoiceStateStore.getVoiceStatesForChannel(channelId);
-  return states ? Object.keys(states).map(i => ({ id: i, tag: UserStore.getUser(i).tag })) : null;
+  return states ? Object.keys(states).map(i => {
+    let u = UserStore.getUser(i);
+    return {
+      id: u?.id,
+      tag: u?.tag,
+      avatar: u?.avatar
+    }
+  }).filter(i=>i?.id) : null;
 }
 
 /** @returns {VoiceStateShaped?} */
@@ -33,6 +41,7 @@ export function getUserVoiceStateShaped(userId) {
 
 /** @returns {VoiceStateShaped} */
 function makeShape(i) {
+  let channelRedacted = persist.ghost.settings?.redacted ?? false;
   let channel = ChannelStore.getChannel(i.channelId);
   let guild = GuildStore.getGuild(channel?.guild_id);
   let user = UserStore.getUser(i.userId);
@@ -54,7 +63,9 @@ function makeShape(i) {
     },
     channel: channel ? {
       id: channel.id,
-      name: channel.name || [...channel.rawRecipients.map(i=>UserStore.getUser(i.id)), UserStore.getCurrentUser()].map(i=>`${i.username}#${i.discriminator}`).sort((a, b)=>a > b).join(", ") || "Unknown"
+      name: channelRedacted ? "Unknown" : (channel.name || [...new Map([...channel.recipients.map(i => [i, UserStore.getUser(i)]), [UserStore.getCurrentUser().id, UserStore.getCurrentUser()]]).values()].filter(i=>i).map(i => i.username).sort((a, b) => a > b).join(", ") || "Unknown"),
+      icon: channelRedacted ? undefined : channel?.icon,
+      redacted: channelRedacted
     } : undefined,
     guild: guild ? {
       id: guild.id,

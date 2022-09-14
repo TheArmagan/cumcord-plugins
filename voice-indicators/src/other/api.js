@@ -1,5 +1,5 @@
 import { awaitResponse } from "../connection/websocket";
-import { getUserVoiceStateShaped } from "./VoiceStates";
+import { getUserVoiceStateShaped, getVoiceChannelMembers } from "./VoiceStates";
 
 const cache = new Map();
 
@@ -14,23 +14,23 @@ setInterval(() => {
 export async function fetchUserVoiceStates(userId) {
   let state = getUserVoiceStateShaped(userId);
   if (!state) {
-    let cached = cache.get(userId);
+    let cached = cache.get(`Users:${userId}`);
     if (cached && !(Date.now() - cached.at > 1000)) return cached.state;
 
     state = (await awaitResponse("voiceState", userId))?.data;
-    cache.set(userId, { at: Date.now(), state, ttl: 1000 });
+    cache.set(`Users:${userId}`, { at: Date.now(), state, ttl: 1000 });
   }
   return state;
 }
 
-// export async function fetchVoiceMembers(channelId) {
-//   let state = getUserVoiceStateShaped(userId);
-//   if (!state) {
-//     let cached = cache.get(userId);
-//     if (cached && !(Date.now() - cached.at > 1000)) return cached.state;
+export async function fetchVoiceMembers(channelId) {
+  let members = getVoiceChannelMembers(channelId);
+  if (!members) {
+    let cached = cache.get(`VoiceMembers:${channelId}`);
+    if (cached && !(Date.now() - cached.at > 10000)) return cached.members;
 
-//     state = (await awaitResponse("voiceState", userId))?.data;
-//     cache.set(userId, { at: Date.now(), state, ttl: 1000 });
-//   }
-//   return state;
-// }
+    members = (await awaitResponse("voiceMembers", channelId))?.data;
+    cache.set(`VoiceMembers:${channelId}`, { at: Date.now(), members, ttl: 10000 });
+  }
+  return members;
+}

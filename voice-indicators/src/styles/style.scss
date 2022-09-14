@@ -8,11 +8,8 @@
   cursor: pointer;
   width: 20px;
   height: 20px;
-
-  &.vi--cant-join {
-    opacity: 0.75;
-  }
 }
+
 
 .vi--container {
   display: flex;
@@ -38,7 +35,6 @@
   box-shadow: 0px 0px 4px #ed4245;
 }
 
-
 [class*="message-"] [class*="headerText-"],
 [class*="message-"] h2[class*="header-"],
 [class*="topSection-"] [class*="nameTag-"],
@@ -50,4 +46,177 @@
 [class*="topSection-"] [class*="nameTag-"] *,
 [class*="headerTop-"] [class*="nameTag-"] * {
   overflow: hidden;
+}
+
+.vi--settings-container {
+  & > .settings {
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    .line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      
+      .switch {
+        min-width: 50px;
+        width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      h2,
+      p {
+        margin: 0;
+      }
+
+      h2 {
+        color: whitesmoke;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      p {
+        margin-top: 4px;
+        color: rgb(214, 214, 214);
+      }
+    }
+  }
+}
+
+.vi--modal {
+  display: flex;
+  flex-direction: column;
+
+  .vi--modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+
+    & > .title-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+
+      .icon {
+        width: 64px;
+        height: 64px;
+        background-position: center;
+        background-size: contain;
+        border-radius: 50%;
+        margin-right: 8px;
+        background-color: #5865f2;
+      }
+
+      .title {
+        display: flex;
+        align-items: center;
+
+        .guild {
+          font-size: 28px;
+          font-weight: 600;
+          color: #efefef;
+        }
+
+        .vanity {
+          margin-left: 8px;
+          cursor: pointer;
+          svg {
+            width: 24px;
+            height: 24px;
+          }
+        }
+      }
+    }
+  }
+
+  .vi--modal-content {
+    & > .channel {
+      & > .name-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #25272a;
+        padding: 8px;
+        border-radius: 8px;
+
+        & > .name {
+          display: flex;
+          font-size: 20px;
+          font-weight: 400;
+          color: #efefef;
+          align-items: center;
+          svg {
+            margin-right: 8px;
+            width: 24px;
+            height: 24px;
+            pointer-events: none;
+          }
+        }
+
+        & > .controls {
+          display: flex;
+
+          & > .control {
+            padding: 4px;
+            cursor: pointer;
+
+            svg {
+              width: 24px;
+              height: 24px;
+            }
+          }
+        }
+      }
+
+      & > .members-container {
+        padding: 8px;
+        padding-left: 40px;
+        & > .members {
+          display: flex;
+          flex-direction: column;
+
+          .member {
+            display: flex;
+            margin-bottom: 4px;
+
+            & > .avatar {
+              width: 32px;
+              height: 32px;
+              border-radius: 50%;
+              background-position: center;
+              background-size: contain;
+              margin-right: 8px;
+            }
+
+            & > .name-container {
+              display: flex;
+              align-items: center;
+              font-size: 18px;
+              color: rgb(223, 223, 223);
+              background-color: #272a2d;  
+              padding: 8px;
+              border-radius: 9999px;
+
+              .discriminator {
+                opacity: 0.5;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.vi--cant-join {
+  opacity: 0.75;
+}
+
+.vi--cant-click {
+  cursor: default !important;
+  opacity: 0.5;
 }

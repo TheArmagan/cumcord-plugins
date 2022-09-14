@@ -1,8 +1,10 @@
-import webpack from "@cumcord/modules/webpack";
 import { events } from "../connection/events";
+import { openInfoModal } from "../methods/openInfoModal";
 import { fetchUserVoiceStates } from "../other/api";
+import { persist } from "@cumcord/pluginData";
 
-import { GuildStore, React, Router } from "../other/apis";
+
+import { ChannelStore, DiscordTooltip, Permissions, PermissionStore, React } from "../other/apis";
 import { COLORS } from "../other/constants";
 
 import { DeafIcon } from "./DeafIcon";
@@ -10,11 +12,11 @@ import { MuteIcon } from "./MuteIcon";
 import { VideoIcon } from "./VideoIcon";
 import { VoiceIcon } from "./VoiceIcon";
 
-const { TooltipContainer: Tooltip } = webpack.findByProps("TooltipContainer");
+
 
 export function Indicator({ userId }) {
-  /** @type {[{state: import("../other/VoiceStates").VoiceStateShaped, inMyGuilds: boolean}, any]} */
-  let [data, setData] = React.useState({ state: null, inMyGuilds: false });
+  /** @type {[{state: import("../other/VoiceStates").VoiceStateShaped, inMyChannels: boolean, isJoinable: boolean}, any]} */
+  let [data, setData] = React.useState({ state: null, inMyChannels: false, isJoinable: false });
   let fetching = false;
 
   async function onChange() {
@@ -22,7 +24,12 @@ export function Indicator({ userId }) {
     fetching = true;
     let state = await fetchUserVoiceStates(userId);
     fetching = false;
-    setData({ state, inMyGuilds: !!GuildStore.getGuild(state?.guild?.id) });
+    let channel = ChannelStore.getChannel(state?.channel?.id);
+    setData({
+      state,
+      inMyChannels: !!channel,
+      isJoinable: !channel ? false : (channel.type == 3 ? true : (PermissionStore.can(Permissions.CONNECT, channel) && PermissionStore.can(Permissions.VIEW_CHANNEL, channel)))
+    });
   }
 
   React.useEffect(() => {
@@ -31,20 +38,20 @@ export function Indicator({ userId }) {
     return () => events.off("check", onChange);
   }, []);
 
-  return !data?.state ? null : (
+  return !data?.state?.states ? null : (
     <div className="vi--container">
-      <Tooltip
+      <DiscordTooltip
         key={`vi--tooltip-${userId}`}
-        text={`${data.inMyGuilds ? "✅" : "❌"} ${data.state.guild ? (data.state.guild?.name || "Unknown Guild") : "In Private Call"} > ${data.state.channel?.name || "Plugin Deprecated"}`}
+        text={`${data.inMyChannels ? "✅" : "❌"} ${data.state.guild ? (data.state.guild?.name || "Unknown Guild") : "Private Call"} > ${data.state.channel?.name || "Plugin Deprecated"}`}
         position="top"
         className="vi--tooltip"
       >
         <span
-          className={`vi--icon-container ${(!data.inMyGuilds || data.state.isPrivate) ? "vi--cant-join" : ""}`}
+          className={`vi--icon-container ${!data.inMyChannels ? "vi--cant-join" : ""} ${persist.ghost.settings?.redacted || (data.state.isPrivate && data.state.channel?.redacted) ? "vi--cant-click" : ""}`}
           onClick={(e) => {
-            if (!data.inMyGuilds || data.state.isPrivate) return;
             e.preventDefault();
-            Router.transitionTo(`/channels/${data.state.guild.id}/${data.state.channel.id}`);
+            if (persist.ghost.settings?.redacted || (data.state.isPrivate && data.state.channel?.redacted)) return;
+            openInfoModal(data);
           }}
         >
           {
@@ -59,7 +66,7 @@ export function Indicator({ userId }) {
                     : <VoiceIcon color={COLORS.SECONDARY} />
           }
         </span>
-      </Tooltip>
+      </DiscordTooltip>
     </div>
   );
 }

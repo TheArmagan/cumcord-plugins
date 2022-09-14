@@ -1,3 +1,4 @@
+import { Settings } from "./components/Settings";
 import { websocket } from "./connection/websocket";
 import patchContainer from "./other/patchContainer";
 
@@ -18,5 +19,8 @@ export default {
   onUnload() {
     patchContainer.removeAll();
     websocket.close();
+  },
+  settings() {
+    return <Settings />
   }
 }

@@ -1,13 +1,129 @@
-import { ModalComponents } from "../other/apis";
+import webpack from "@cumcord/modules/webpack";
+import { events } from "../connection/events";
+import { fetchVoiceMembers } from "../other/api";
+import { DiscordTooltip, InviteStore, ModalComponents, Router, selectVoiceChannel } from "../other/apis";
+import { COLORS } from "../other/constants";
+import { ArrowIcon } from "./ArrowIcon";
+import { JoinCallIcon } from "./JoinCallIcon";
+import { VoiceIcon } from "./VoiceIcon";
 
-export function Modal({ e, state }) {
+const scrollClasses = webpack.findByProps("thin", "scrollerBase");
+
+export function Modal({ e, data }) {
+  let [members, setMembers] = React.useState([]);
+  let fetching = false;
+
+  async function onChange() {
+    if (fetching) return;
+    fetching = true;
+    let d = await fetchVoiceMembers(data.state.channel.id);
+    fetching = false;
+    setMembers(d);
+  }
+
+  React.useEffect(() => {
+    onChange();
+    events.on("check", onChange);
+    return () => events.off("check", onChange);
+  }, []);
+
   return (
     <ModalComponents.ModalRoot
       transitionState={e.transitionState}
       size="large"
       className="vi--modal">
-
-
+      <ModalComponents.ModalHeader separator={false} className="vi--modal-header" >
+        <div className="title-container">
+          <div className="icon" style={{ backgroundImage: data.state.guild ? `url('https://cdn.discordapp.com/icons/${data.state.guild.id}/${data.state.guild.icon}.png?size=128')` : (data.state.channel ? `url('https://cdn.discordapp.com/channel-icons/${data.state.channel.id}/${data.state.channel.icon}.png?size=128')` : null) }}></div>
+          <div className="title">
+            <div className="guild">
+              {data.state.isPrivate ? "Private Call" : data.state.guild.name}
+            </div>
+            {
+              !data.state?.guild?.vanity || data.inMyChannels ? null : <div
+                className="vanity"
+                onClick={(ev) => {
+                  ev.preventDefault();
+                  if (!data.state?.guild?.vanity) return;
+                  InviteStore.acceptInviteAndTransitionToInviteChannel({ inviteKey: data.state?.guild?.vanity });
+                  e.onClose();
+                }}
+              >
+                <DiscordTooltip
+                  key={`vi--tooltip-show-channel`}
+                  text={data.inMyChannels ? "Join Guild" : "Can't Join Guild"}
+                  position="top"
+                  className="vi--tooltip"
+                >
+                  <ArrowIcon color={COLORS.PRIMARY} />
+                </DiscordTooltip>
+              </div>
+            }
+          </div>
+        </div>
+        <ModalComponents.ModalCloseButton onClick={e.onClose} className="vi--modal-close" />
+      </ModalComponents.ModalHeader>
+      <ModalComponents.ModalContent className="vi--modal-content">
+        <div className="channel">
+          <div className="name-container">
+            <div className="name">
+              <VoiceIcon />
+              {data.state.channel?.name || "Unknown"}
+            </div>
+            <div className="controls">
+              <div
+                className={`control ${!data.isJoinable ? "vi--cant-click vi--cant-join" : ""}`}
+                onClick={(ev) => {
+                  ev.preventDefault();
+                  if (!data.isJoinable) return;
+                  selectVoiceChannel(data.state.channel.id)
+                  e.onClose();
+                }}
+              >
+                <DiscordTooltip
+                  key={`vi--tooltip-join-call`}
+                  text={data.isJoinable ? "Connect" : "Can't Connect"}
+                  position="top"
+                  className="vi--tooltip"
+                >
+                  <JoinCallIcon color={COLORS.SECONDARY} />
+                </DiscordTooltip>
+              </div>
+              <div
+                className={`control ${!data.inMyChannels ? "vi--cant-click" : ""}`}
+                onClick={(ev) => {
+                  ev.preventDefault();
+                  if (!data.inMyChannels) return;
+                  Router.transitionTo(`/channels/${data.state.guild ? data.state.guild.id : "@me"}/${data.state.channel.id}`);
+                  e.onClose();
+                }}
+              >
+                <DiscordTooltip
+                  key={`vi--tooltip-show-channel`}
+                  text={data.inMyChannels ? "Show Channel" : "Can't Show Channel"}
+                  position="top"
+                  className="vi--tooltip"
+                >
+                  <ArrowIcon color={COLORS.SECONDARY} />
+                </DiscordTooltip>
+              </div>
+            </div>
+          </div>
+          <div className="members-container">
+            <div className={`members ${scrollClasses.thin}`}>
+              {members.map(member => (
+                <div className="member">
+                  <div className="avatar" style={{ backgroundImage: `url("${member.avatar ? `https://cdn.discordapp.com/avatars/${member.id}/${member.avatar}.png?size=128` : `https://cdn.discordapp.com/embed/avatars/${Number(member.tag.split("#")[1]) % 5}.png`}")` }}></div>
+                  <div className="name-container">
+                    <div className="name">{member.tag.split("#")[0]}</div>
+                    <div className="discriminator">#{member.tag.split("#")[1]}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </ModalComponents.ModalContent>
     </ModalComponents.ModalRoot>
   );
 }
