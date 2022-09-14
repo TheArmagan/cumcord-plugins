@@ -4,7 +4,8 @@ import { FluxDispatcher, NoteStore, React } from "../other/apis";
 import { cache } from "../other/cache";
 import { Indicator } from "./Indicator";
 
-const { getUser } = webpack.findByProps("getUser");
+const { getUser } = webpack.findByProps("getUser", "getCurrentUser");
+const { getUser: fetchUser } = webpack.findByProps("getUser", "fetchProfile");
 
 export function Settings() {
   let [data, setData] = React.useState([]);
@@ -14,7 +15,7 @@ export function Settings() {
     for (const key in cache.notes) {
       let note = NoteStore.getNote(key)?.note;
       if (!note) continue;
-      let user = await getUser(key);
+      let user = getUser(key);
       if (!user) continue;
       notes.push({
         user,
@@ -32,8 +33,9 @@ export function Settings() {
     {
       !data.length ? <h2 className="loading">Loading..</h2> : data.map((note) => <div
         className="user"
-        onClick={(e2) => {
+        onClick={async (e2) => {
           e2.preventDefault();
+          await fetchUser(note.user.id);
           FluxDispatcher.dispatch({
             type: "USER_PROFILE_MODAL_OPEN",
             userId: note.user.id

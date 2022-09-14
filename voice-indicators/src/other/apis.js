@@ -15,3 +15,5 @@ export const { Permissions } = common.constants;
 export const { selectVoiceChannel } = webpack.findByProps("selectVoiceChannel", "disconnect");
 export const { TooltipContainer: DiscordTooltip } = webpack.findByProps("TooltipContainer");
 export const InviteStore = webpack.findByProps("acceptInvite", "acceptInviteAndTransitionToInviteChannel");
+export const FluxDispatcher = webpack.findByProps("isDispatching", "dispatch");
+export const { getUser: fetchUser } = webpack.findByProps("getUser", "fetchProfile");

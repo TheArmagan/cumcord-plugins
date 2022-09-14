@@ -25,12 +25,12 @@ export async function fetchUserVoiceStates(userId) {
 
 export async function fetchVoiceMembers(channelId) {
   let members = getVoiceChannelMembers(channelId);
-  if (!members) {
+  if (!members.length) {
     let cached = cache.get(`VoiceMembers:${channelId}`);
-    if (cached && !(Date.now() - cached.at > 10000)) return cached.members;
+    if (cached && !(Date.now() - cached.at > 1000)) return cached.members;
 
     members = (await awaitResponse("voiceMembers", channelId))?.data;
-    cache.set(`VoiceMembers:${channelId}`, { at: Date.now(), members, ttl: 10000 });
+    cache.set(`VoiceMembers:${channelId}`, { at: Date.now(), members, ttl: 1000 });
   }
   return members;
 }

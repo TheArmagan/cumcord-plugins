@@ -1,7 +1,7 @@
 import webpack from "@cumcord/modules/webpack";
 import { events } from "../connection/events";
 import { fetchVoiceMembers } from "../other/api";
-import { DiscordTooltip, InviteStore, ModalComponents, Router, selectVoiceChannel } from "../other/apis";
+import { DiscordTooltip, fetchUser, FluxDispatcher, InviteStore, ModalComponents, Router, selectVoiceChannel } from "../other/apis";
 import { COLORS } from "../other/constants";
 import { ArrowIcon } from "./ArrowIcon";
 import { JoinCallIcon } from "./JoinCallIcon";
@@ -112,7 +112,17 @@ export function Modal({ e, data }) {
           <div className="members-container">
             <div className={`members ${scrollClasses.thin}`}>
               {members.map(member => (
-                <div className="member">
+                <div
+                  className="member"
+                  onClick={async (ev) => {
+                    ev.preventDefault();
+                    await fetchUser(member.id);
+                    FluxDispatcher.dispatch({
+                      type: "USER_PROFILE_MODAL_OPEN",
+                      userId: member.id
+                    });
+                  }}
+                >
                   <div className="avatar" style={{ backgroundImage: `url("${member.avatar ? `https://cdn.discordapp.com/avatars/${member.id}/${member.avatar}.png?size=128` : `https://cdn.discordapp.com/embed/avatars/${Number(member.tag.split("#")[1]) % 5}.png`}")` }}></div>
                   <div className="name-container">
                     <div className="name">{member.tag.split("#")[0]}</div>
