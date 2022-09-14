@@ -21,7 +21,7 @@ export function Modal({ e, data }) {
     fetching = true;
     let d = await fetchVoiceMembers(data.state.channel.id);
     fetching = false;
-    setMembers(d);
+    setMembers(d || []);
   }
 
   React.useEffect(() => {
