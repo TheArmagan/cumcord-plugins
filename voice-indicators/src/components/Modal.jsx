@@ -1,7 +1,7 @@
 import webpack from "@cumcord/modules/webpack";
 import { events } from "../connection/events";
 import { fetchVoiceMembers } from "../other/api";
-import { DiscordTooltip, fetchUser, FluxDispatcher, InviteStore, ModalComponents, Router, selectVoiceChannel } from "../other/apis";
+import { DiscordTooltip, fetchProfile, fetchMutualFriends, FluxDispatcher, InviteStore, ModalComponents, Router, selectVoiceChannel } from "../other/apis";
 import { COLORS } from "../other/constants";
 import { ArrowIcon } from "./ArrowIcon";
 import { DeafIcon } from "./DeafIcon";
@@ -119,7 +119,8 @@ export function Modal({ e, data }) {
                   className="member"
                   onClick={async (ev) => {
                     ev.preventDefault();
-                    await fetchUser(member.id);
+                    await fetchProfile(member.id);
+                    await fetchMutualFriends(member.id);
                     FluxDispatcher.dispatch({
                       type: "USER_PROFILE_MODAL_OPEN",
                       userId: member.id
