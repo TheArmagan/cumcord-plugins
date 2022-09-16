@@ -1,4 +1,4 @@
-import { awaitResponse } from "../connection/websocket";
+import { awaitResponse } from "../connection/socket";
 import { getUserVoiceStateShaped, getVoiceChannelMembers } from "./VoiceStates";
 
 const cache = new Map();
@@ -17,7 +17,7 @@ export async function fetchUserVoiceStates(userId) {
     let cached = cache.get(`Users:${userId}`);
     if (cached && !(Date.now() - cached.at > 1000)) return cached.state;
 
-    state = (await awaitResponse("voiceState", userId))?.data;
+    state = (await awaitResponse("state", { userId }))?.data;
     cache.set(`Users:${userId}`, { at: Date.now(), state, ttl: 1000 });
   }
   return state;
@@ -29,7 +29,7 @@ export async function fetchVoiceMembers(channelId) {
     let cached = cache.get(`VoiceMembers:${channelId}`);
     if (cached && !(Date.now() - cached.at > 10000)) return cached.members;
 
-    members = (await awaitResponse("voiceMembers", channelId))?.data || [];
+    members = (await awaitResponse("members", { channelId }))?.data || [];
     cache.set(`VoiceMembers:${channelId}`, { at: Date.now(), members, ttl: 10000 });
   }
   return members;

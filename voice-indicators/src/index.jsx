@@ -1,5 +1,5 @@
 import { Settings } from "./components/Settings";
-import { websocket } from "./connection/websocket";
+import { socket } from "./connection/socket";
 import patchContainer from "./other/patchContainer";
 
 import { patchDirectMessageList } from "./patches/directMessageList";
@@ -18,7 +18,7 @@ export default {
   },
   onUnload() {
     patchContainer.removeAll();
-    websocket.close();
+    socket.disconnect();
   },
   settings() {
     return <Settings />
