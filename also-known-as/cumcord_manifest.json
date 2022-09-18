@@ -1,0 +1,7 @@
+{
+  "name": "Also Known As",
+  "description": "See all nicknames of user by using /aka command.",
+  "author": "TheArmagan",
+  "file": "src/index.js",
+  "license": "GNU General Public License Version 3"
+}
