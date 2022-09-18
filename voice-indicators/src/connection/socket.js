@@ -1,14 +1,15 @@
 import io from "socket.io-client";
 import { UserStore } from "../other/apis";
 import { getUserVoiceStateShaped, getVoiceChannelMembers } from "../other/VoiceStates";
+import msgPackParser from "socket.io-msgpack-parser"
 
-export const socket = io("https://ccwss.armagan.rest/", {
-  transports: ["websocket"]
+export const socket = io("https://ccwss.armagan.rest/voice-indicators", {
+  transports: ["websocket"],
+  parser: msgPackParser
 });
 
 socket.on("connect", () => {
-  socket.emit(":setConnection", {
-    namespace: "VoiceIndicators",
+  socket.emit(":setUser", {
     userId: UserStore.getCurrentUser().id
   });
 });
