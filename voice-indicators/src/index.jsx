@@ -6,10 +6,11 @@ import { patchStyles } from "./patches/styles";
 
 import { logger } from "@acord/utils"; 
 import { Indicator } from "./components/Indicator.jsx";
+import { openModalByUserId } from "./methods/openModalByUserId.js";
 
 export default {
   onLoad() {
-    console.log(Indicator("707309693449535599"))
+    window.viOpenModalByUserId = openModalByUserId;
     patchStyles();
   },
   onUnload() {
