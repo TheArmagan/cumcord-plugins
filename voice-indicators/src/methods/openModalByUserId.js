@@ -1,5 +1,5 @@
 import { fetchUserVoiceStates } from "../other/api.js";
-import { ChannelStore } from "../other/apis.js";
+import { ChannelStore, Permissions, PermissionStore } from "../other/apis.js";
 import { openInfoModal } from "./openInfoModal.jsx";
 
 export async function openModalByUserId(userId) {
