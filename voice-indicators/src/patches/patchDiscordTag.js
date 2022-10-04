@@ -1,5 +1,5 @@
-import webpack from "@cumcord/modules/webpack";
-import patcher from "@cumcord/patcher";
+import webpack from "@acord/modules/webpack";
+import patcher from "@acord/patcher";
 import { Indicator } from "../components/Indicator";
 import patchContainer from "../other/patchContainer";
 

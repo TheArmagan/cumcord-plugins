@@ -1,5 +1,5 @@
-import webpack from "@cumcord/modules/webpack";
-import common from "@cumcord/modules/common";
+import webpack from "@acord/modules/webpack";
+import common from "@acord/modules/common";
 
 export const GuildStore = webpack.findByProps("getGuild", "getGuildCount");
 export const ChannelStore = webpack.findByProps("getDMFromUserId", "getDMUserIds", "getChannel");

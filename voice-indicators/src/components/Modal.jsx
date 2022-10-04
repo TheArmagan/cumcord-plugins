@@ -1,4 +1,4 @@
-import webpack from "@cumcord/modules/webpack";
+import webpack from "@acord/modules/webpack";
 import { events } from "../connection/events";
 import { fetchVoiceMembers } from "../other/api";
 import { DiscordTooltip, fetchProfile, fetchMutualFriends, FluxDispatcher, InviteStore, ModalComponents, Router, selectVoiceChannel } from "../other/apis";

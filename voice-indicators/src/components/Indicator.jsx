@@ -1,7 +1,7 @@
 import { events } from "../connection/events";
 import { openInfoModal } from "../methods/openInfoModal";
 import { fetchUserVoiceStates } from "../other/api";
-import { persist } from "@cumcord/pluginData";
+import { persist } from "@acord/pluginData";
 
 
 import { ChannelStore, DiscordTooltip, Permissions, PermissionStore, React } from "../other/apis";

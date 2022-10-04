@@ -1,5 +1,5 @@
-import { persist } from "@cumcord/pluginData";
-import { useNest } from "@cumcord/utils";
+import { persist } from "@acord/pluginData";
+import { useNest } from "@acord/utils";
 
 import { DiscordSwitch, React } from "../other/apis";
 
