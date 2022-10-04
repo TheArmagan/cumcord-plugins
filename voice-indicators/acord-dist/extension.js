@@ -8780,4 +8780,4 @@ function patchDiscordTag() {
   settings() {
     return /* @__PURE__ */ React__namespace.createElement(Settings, null);
   }
-};return index;})(acord.modules.common.React,acord.pluginData,acord.utils,acord.modules.webpack,acord.modules?.common,require$$0,require$$1,require$$2,require$$3,require$$4,require$$0$2,require$$0$1,require$$3$1,require$$4$1,require$$5,require$$0$3,acord.patcher);
+};return index;})(acord.modules.common.React,acord.pluginData,acord.utils,acord.modules.webpack,acord.modules.common,require$$0,require$$1,require$$2,require$$3,require$$4,require$$0$2,require$$0$1,require$$3$1,require$$4$1,require$$5,require$$0$3,acord.patcher);
