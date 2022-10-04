@@ -1,0 +1,12 @@
+{
+  "hash": "7a6426bc1a8d6a384e0437f4bb341d9de316a93994edc50d5e0dfa7104b25b4c",
+  "type": "plugin",
+  "about": {
+    "name": "Voice Indicators",
+    "authors": [
+      "TheArmagan"
+    ],
+    "description": "Show the voice indicators right side of the user names. (armagan.rest)",
+    "version": "0.0.1"
+  }
+}
