@@ -7,7 +7,8 @@ export const VoiceStateStore = webpack.findByProps("getVoiceState", "getUserVoic
 export const Router = webpack.findByProps("transitionTo");
 export const React = webpack.findByProps("createElement");
 export const UserStore = webpack.findByProps("getUser", "getCurrentUser");
-export const ModalComponents = webpack.findByProps("ModalCloseButton");
+// export const ModalComponents = webpack.findByProps("ModalCloseButton");
+export const ModalRoot = webpack.findByStrings("e.onAnimationEnd,L=vo");
 export const DiscordSwitch = webpack?.findByDisplayName?.("Switch");
 export const { openModal } = common.modals;
 export const PermissionStore = webpack.findByProps("getChannelPermissions");

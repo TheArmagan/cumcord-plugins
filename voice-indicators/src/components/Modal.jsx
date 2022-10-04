@@ -2,9 +2,10 @@ import webpack from "@acord/modules/webpack";
 import { events } from "../connection/events";
 import { fetchVoiceMembers } from "../other/api";
 // import { DiscordTooltip, fetchProfile, fetchMutualFriends, FluxDispatcher, InviteStore, ModalComponents, Router, selectVoiceChannel } from "../other/apis";
-import { DiscordTooltip, FluxDispatcher, InviteStore, ModalComponents, Router, selectVoiceChannel } from "../other/apis";
+import { DiscordTooltip, FluxDispatcher, InviteStore, ModalRoot, Router, selectVoiceChannel } from "../other/apis";
 import { COLORS } from "../other/constants";
 import { ArrowIcon } from "./ArrowIcon";
+import { CloseIcon } from "./CloseIcon.jsx";
 import { DeafIcon } from "./DeafIcon";
 import { JoinCallIcon } from "./JoinCallIcon";
 import { MuteIcon } from "./MuteIcon";
@@ -32,11 +33,11 @@ export function Modal({ e, data }) {
   }, []);
 
   return (
-    <ModalComponents.ModalRoot
+    <ModalRoot
       transitionState={e.transitionState}
       size="large"
       className="vi--modal">
-      <ModalComponents.ModalHeader separator={false} className="vi--modal-header" >
+      <div className="vi--modal-header" >
         <div className="title-container">
           <div className="icon" style={{ backgroundImage: data.state.guild ? `url('https://cdn.discordapp.com/icons/${data.state.guild.id}/${data.state.guild.icon}.png?size=128')` : (data.state.channel ? `url('https://cdn.discordapp.com/channel-icons/${data.state.channel.id}/${data.state.channel.icon}.png?size=128')` : null) }}></div>
           <div className="title">
@@ -65,9 +66,12 @@ export function Modal({ e, data }) {
             }
           </div>
         </div>
-        <ModalComponents.ModalCloseButton onClick={e.onClose} className="vi--modal-close" />
-      </ModalComponents.ModalHeader>
-      <ModalComponents.ModalContent className="vi--modal-content">
+        
+        <div onClick={e.onClose} className="vi--modal-close" >
+          <CloseIcon color={COLORS.SECONDARY} />
+        </div>
+      </div>
+      <div className="vi--modal-content">
         <div className="channel">
           <div className="name-container">
             <div className="name">
@@ -156,7 +160,7 @@ export function Modal({ e, data }) {
             </div>
           </div>
         </div>
-      </ModalComponents.ModalContent>
-    </ModalComponents.ModalRoot>
+      </div>
+    </ModalRoot>
   );
 }

@@ -131,6 +131,13 @@
         }
       }
     }
+
+    & > .vi--modal-close {
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
   }
 
   .vi--modal-content {
