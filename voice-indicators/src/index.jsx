@@ -8,12 +8,14 @@ import { patchMessageHeader } from "./patches/messageHeader";
 import { patchDiscordTag } from "./patches/patchDiscordTag";
 import { patchStyles } from "./patches/styles";
 
+import { logger } from "@acord/utils"; 
+
 export default {
   onLoad() {
-    patchDirectMessageList();
-    patchMemberListItem();
-    patchMessageHeader();
-    patchDiscordTag();
+    try { patchDirectMessageList(); } catch (err) { logger.error(err) };
+    try { patchMemberListItem(); } catch (err) { logger.error(err) };
+    try { patchMessageHeader(); } catch (err) { logger.error(err) };
+    try { patchDiscordTag(); } catch (err) { logger.error(err) };
     patchStyles();
   },
   onUnload() {
